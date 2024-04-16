@@ -1,0 +1,13 @@
+{
+  "type": "space",
+  "name": "conceptiks-website",
+  "loadPlugins": [],
+  "id": "db2c9de6bdf44847913d425128998cb3",
+  "@version": 6,
+  "cloneInfo": {
+    "contentIdMap": {},
+    "modelIdMap": {
+      "50f11f3b07ee4d41afe7e9bee151127d": "3693aac24b0a4b5fbaee58f09c264a8b"
+    }
+  }
+}
