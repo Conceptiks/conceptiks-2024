@@ -4,6 +4,11 @@ const colors = require('tailwindcss/colors');
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./src/**/*.{html,js,svelte,ts}'],
+  theme: {
+    fontFamily: {
+      sans: ['Source Sans Pro', ...defaultTheme.fontFamily.sans],
+    },
+  },
   corePlugins: {
     preflight: true,
   },
