@@ -4,5 +4,5 @@
 @tailwind utilities;
 
 h1 {
-  @apply font-semibold text-2xl;
+  @apply font-semibold text-4xl;
 }
