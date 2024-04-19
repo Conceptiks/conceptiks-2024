@@ -18,10 +18,10 @@
       </a>
       <ul class="justify-end flex gap-6 md:gap-8 items-center">
         <li><a href="/">Über</a></li>
-        <li><a href="/ueber">Leistungen</a></li>
+        <li><a href="/">Leistungen</a></li>
         <li>
           <a
-            href="/booking"
+            href="/"
             class=" py-2 px-2 rounded-full inline-block bg-black hover:bg-red-500 transition-all text-white leading-none"
             >Kontakt</a
           >
