@@ -36,8 +36,6 @@
     aspectRatio: item.aspectRatio.split("/").reduce((a, b) => a / b),
   }));
 
-  $: console.log(items);
-
   const categories = items.reduce((acc, item) => {
     item.reference.value.data.category.forEach((category) => {
       if (!acc.includes(category)) {
@@ -49,13 +47,21 @@
 
   let selectedCategory = categories[0];
 
-  $: console.log(selectedCategory);
+  $: filteredItems = mappedItems.filter((item) => {
+    if (selectedCategory === null) {
+      return item;
+    } else {
+      return item.reference.value.data.category.includes(selectedCategory);
+    }
+  });
+
+  $: console.log(filteredItems);
 </script>
 
 <Container>
-  <fieldset class="flex gap-3 -mx-2 mb-4">
+  <fieldset class="flex flex-wrap gap-y-1 gap-x-2 lg:gap-3 mb-8 lg:mb-4">
     <legend aria-label="Filter" class="sr-only hidden">Filter</legend>
-    <div class="">
+    <div class="-mx-2">
       <input
         type="radio"
         name="categories"
@@ -77,7 +83,7 @@
         aria-hidden="true"
         role="presentation">/</span
       >
-      <div class="">
+      <div class="-mx-2">
         <input
           type="radio"
           name="categories"
@@ -99,7 +105,7 @@
     animate="{true}"
     idKey="id"
     let:item
-    items="{mappedItems}"
+    items="{filteredItems}"
     {minColWidth}
     {maxColWidth}
     {gap}
