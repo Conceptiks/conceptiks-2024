@@ -45,7 +45,7 @@
     return acc;
   }, []);
 
-  let selectedCategory = categories[0];
+  let selectedCategory: string | null = null;
 
   $: filteredItems = mappedItems.filter((item) => {
     if (selectedCategory === null) {
@@ -54,8 +54,6 @@
       return item.reference.value.data.category.includes(selectedCategory);
     }
   });
-
-  $: console.log(filteredItems);
 </script>
 
 <Container>
@@ -112,10 +110,11 @@
     bind:masonryWidth="{width}"
     bind:masonryHeight="{height}"
   >
-    <a class="block" href="{item.reference.value.data.url}">
-      <div
-        class="overflow-clip border-neutral-200 border block w-full bg-white shadow-neutral-100 shadow-lg"
-      >
+    <a
+      class="block relative overflow-clip group shadow-neutral-100 shadow-lg"
+      href="{item.reference.value.data.url}"
+    >
+      <div class=" overflow-clip block w-full bg-white">
         <Image
           objectFit="cover"
           layout="constrained"
@@ -126,7 +125,11 @@
           alt="{item.reference.value.data.title} mockup"
         />
       </div>
-      <h5 class="mt-3">{item.reference.value.data.title}</h5>
+      <div
+        class="bg-white group-hover:bg-black transition-all group-hover:text-white drop-shadow-md absolute bottom-4 left-4 z-10 py-2 px-4"
+      >
+        <h5>{item.reference.value.data.title}</h5>
+      </div>
     </a>
   </Masonry>
 </Container>

@@ -12,5 +12,5 @@ h2 {
 }
 
 h5 {
-  @apply text-lg tracking-tight;
+  @apply uppercase font-semibold text-lg;
 }
