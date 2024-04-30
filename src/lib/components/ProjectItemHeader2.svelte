@@ -37,11 +37,11 @@
       {description}
     </h6>
     {#if categories.length > 0}
-      <div class="flex gap-2 mt-8">
+      <div class="flex overflow-x-auto gap-2 mt-8 -mx-6 px-6">
         {#each categories as category}
           <span
             style="{`background-color: ${brandColor ?? '#111111'}`}"
-            class="border border-white/25 text-white text-xs font-semibold uppercase py-1 px-2"
+            class="shrink-0 border border-white/25 text-white text-xs font-semibold uppercase py-1 px-2"
             aria-hidden="true"
             role="presentation">{category}</span
           >
