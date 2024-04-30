@@ -1,8 +1,5 @@
-<script lang="ts">
-  import { Image } from "@unpic/svelte";
-  import { Masonry } from "svelte-bricks";
-  import Container from "./Container.svelte";
-  export let items: {
+<script lang="ts" context="module">
+  export interface MasonryItem {
     aspectRatio:
       | "1/1"
       | "4/3"
@@ -11,7 +8,8 @@
       | "9/16"
       | "2/1"
       | "3/4"
-      | "3/5";
+      | "3/5"
+      | string;
 
     reference: {
       id: string;
@@ -25,9 +23,17 @@
         };
       };
     };
-  }[];
+  }
+</script>
+
+<script lang="ts">
+  import { Image } from "@unpic/svelte";
+  import { Masonry } from "svelte-bricks";
+  import Container from "./Container.svelte";
+  export let items: MasonryItem[] = [];
   let [minColWidth, maxColWidth, gap] = [400, 800, 24];
   let width: number, height: number;
+  let selectedCategory: string | null = null;
 
   // map items to new array with aspectRatio as a number
   $: mappedItems = items.map((item) => ({
@@ -36,24 +42,36 @@
     aspectRatio: item.aspectRatio.split("/").reduce((a, b) => a / b),
   }));
 
-  const categories = items.reduce((acc, item) => {
-    item.reference.value.data.category.forEach((category) => {
-      if (!acc.includes(category)) {
-        acc.push(category);
+  const createFilters = (
+    mappedItems: MasonryItem[],
+    selectedCategory: string | null
+  ) => {
+    if (!mappedItems) return [];
+
+    return mappedItems.filter((item) => {
+      if (selectedCategory === null) {
+        return item;
+      } else {
+        return item.reference.value.data.category.includes(selectedCategory);
       }
     });
-    return acc;
-  }, []);
+  };
 
-  let selectedCategory: string | null = null;
+  const createCateogries = (items: MasonryItem[], itemsw) => {
+    if (!items) return [];
 
-  $: filteredItems = mappedItems.filter((item) => {
-    if (selectedCategory === null) {
-      return item;
-    } else {
-      return item.reference.value.data.category.includes(selectedCategory);
-    }
-  });
+    return items.reduce((acc, item) => {
+      item.reference.value.data.category.forEach((category) => {
+        if (!acc.includes(category)) {
+          acc.push(category);
+        }
+      });
+      return acc;
+    }, []);
+  };
+
+  $: categories = createCateogries(mappedItems, items);
+  $: filteredItems = createFilters(mappedItems, selectedCategory);
 </script>
 
 <Container>
@@ -75,6 +93,7 @@
         >Alle</label
       >
     </div>
+    <!-- {#if categories.length > 0} -->
     {#each categories as category}
       <span
         class="last:hidden text-neutral-300"
@@ -98,38 +117,43 @@
         >
       </div>
     {/each}
+    <!-- {/if} -->
   </fieldset>
-  <Masonry
-    animate="{true}"
-    idKey="id"
-    let:item
-    items="{filteredItems}"
-    {minColWidth}
-    {maxColWidth}
-    {gap}
-    bind:masonryWidth="{width}"
-    bind:masonryHeight="{height}"
-  >
-    <a
-      class="block relative overflow-clip group shadow-neutral-100 shadow-lg"
-      href="{item.reference.value.data.url}"
+  {#if !filteredItems || filteredItems.length === 0}
+    <p>Loading...</p>
+  {:else}
+    <Masonry
+      animate="{true}"
+      idKey="id"
+      let:item
+      items="{filteredItems}"
+      {minColWidth}
+      {maxColWidth}
+      {gap}
+      bind:masonryWidth="{width}"
+      bind:masonryHeight="{height}"
     >
-      <div class=" overflow-clip block w-full bg-white">
-        <Image
-          objectFit="cover"
-          layout="constrained"
-          width="{800}"
-          aspectRatio="{parseFloat(item.aspectRatio)}"
-          class="hover:scale-105 scale-100 transition-transform duration-300 ease-in-out"
-          src="{item.reference.value.data.thumbnail}"
-          alt="{item.reference.value.data.title} mockup"
-        />
-      </div>
-      <div
-        class="bg-white group-hover:bg-black transition-all group-hover:text-white drop-shadow-md absolute bottom-4 left-4 z-10 py-2 px-4"
+      <a
+        class="block relative overflow-clip group shadow-neutral-100 shadow-lg"
+        href="{item.reference.value.data.url}"
       >
-        <h5>{item.reference.value.data.title}</h5>
-      </div>
-    </a>
-  </Masonry>
+        <div class=" overflow-clip block w-full bg-white">
+          <Image
+            objectFit="cover"
+            layout="constrained"
+            width="{800}"
+            aspectRatio="{parseFloat(item.aspectRatio)}"
+            class="hover:scale-105 scale-100 transition-transform duration-300 ease-in-out"
+            src="{item.reference.value.data.thumbnail}"
+            alt="{item.reference.value.data.title} mockup"
+          />
+        </div>
+        <div
+          class="bg-white group-hover:bg-black transition-all group-hover:text-white drop-shadow-md absolute bottom-4 left-4 z-10 py-2 px-4"
+        >
+          <h5>{item.reference.value.data.title}</h5>
+        </div>
+      </a>
+    </Masonry>
+  {/if}
 </Container>
