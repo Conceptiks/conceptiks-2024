@@ -4,12 +4,19 @@
   import { ContainerDef } from "$lib/defs/container.builder.js";
   import { HeaderDef } from "$lib/defs/header.builder.js";
   import { HRDef } from "$lib/defs/hr.builder.js";
+  import { IconDef } from "$lib/defs/icon.builder.js";
   import { SectionDef } from "$lib/defs/section.builder.js";
   import { isPreviewing, Content } from "@builder.io/sdk-svelte";
 
   export let data;
   const { content } = data;
-  const customComponents = [ContainerDef, HeaderDef, HRDef, SectionDef];
+  const customComponents = [
+    ContainerDef,
+    HeaderDef,
+    HRDef,
+    SectionDef,
+    IconDef,
+  ];
 
   const canShowContent = content || isPreviewing();
 
