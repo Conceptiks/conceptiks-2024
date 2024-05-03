@@ -1,6 +1,6 @@
 import { fetchOneEntry, getBuilderSearchParams } from "@builder.io/sdk-svelte";
-import type { PageServerLoad } from "./$types";
 import { fetchAndValidate } from "$lib/utils/validateAndFetch";
+import type { PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ url }) => {
   const content = await fetchAndValidate(fetchOneEntry, "page", {
