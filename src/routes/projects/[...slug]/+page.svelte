@@ -8,6 +8,7 @@
   import ProjectItemHeader2 from "$lib/components/ProjectItemHeader2.svelte";
   import Section from "$lib/components/Section.svelte";
   import { ContainerDef } from "$lib/defs/container.builder.js";
+  import { FlexDef } from "$lib/defs/flex.builder.js";
   import { HeaderDef } from "$lib/defs/header.builder.js";
   import { HRDef } from "$lib/defs/hr.builder.js";
   import { IconDef } from "$lib/defs/icon.builder.js";
@@ -28,8 +29,6 @@
   ];
 
   const canShowContent = content || isPreviewing();
-
-  $: console.log(content);
 </script>
 
 <svelte:head>
