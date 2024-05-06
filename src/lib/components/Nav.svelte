@@ -1,6 +1,7 @@
 <script>
   import { Image } from "@unpic/svelte";
   import Container from "./Container.svelte";
+  import Button from "./Button.svelte";
 </script>
 
 <nav>
@@ -17,14 +18,10 @@
         />
       </a>
       <ul class="justify-end flex gap-6 md:gap-8 items-center">
-        <li><a href="/">Über</a></li>
-        <li><a href="/">Leistungen</a></li>
+        <li><a href="/ueber">Über</a></li>
+        <li><a href="/leistungen">Leistungen</a></li>
         <li>
-          <a
-            href="/"
-            class=" py-2 px-2 rounded-full inline-block bg-black hover:bg-red-500 transition-all text-white leading-none"
-            >Kontakt</a
-          >
+          <Button href="/kontakt" size="sm">Kontakt</Button>
         </li>
       </ul>
     </div>

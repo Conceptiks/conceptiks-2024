@@ -35,3 +35,38 @@ h6 {
 p {
   @apply !text-neutral-600 !leading-relaxed;
 }
+
+@keyframes underline-grow {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+/* Apply animation to the underline */
+.underline-grow {
+  .white {
+    background-color: white;
+  }
+  .black {
+    background-color: black;
+  }
+  .primary {
+    @apply bg-blue-500;
+  }
+  &::after {
+    content: "";
+    display: block;
+    width: 0;
+    background-color: white;
+    height: 1px; /* You can adjust the thickness of the underline */
+    transition: width 0.3s ease; /* Smooth transition for width change */
+  }
+}
+
+/* Trigger animation on hover */
+.underline-grow:hover::after {
+  width: 100%;
+}

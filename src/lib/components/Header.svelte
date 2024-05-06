@@ -9,7 +9,7 @@
   <Container>
     <h1>{title}</h1>
     <p class="mt-4 text-lg text-neutral-500">
-      {description}
+      {@html description}
     </p>
   </Container>
 </header>

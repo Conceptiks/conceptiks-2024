@@ -1,14 +1,24 @@
 <script lang="ts">
   import { PUBLIC_BUILDER_API_KEY } from "$env/static/public";
+  import { ButtonDef } from "$lib/defs/button.builder.js";
   import { ContainerDef } from "$lib/defs/container.builder.js";
+  import { CTADef } from "$lib/defs/cta.builder.js";
   import { HeaderDef } from "$lib/defs/header.builder.js";
+  import { IconDef } from "$lib/defs/icon.builder.js";
   import { MasonryGridDef } from "$lib/defs/masonryGrid.builder.js";
   import { isPreviewing, Content } from "@builder.io/sdk-svelte";
 
   // this data comes from the function in `+page.server.js`, which runs on the server only
   export let data;
   const { content } = data;
-  const customComponents = [ContainerDef, HeaderDef, MasonryGridDef];
+  const customComponents = [
+    ContainerDef,
+    HeaderDef,
+    MasonryGridDef,
+    CTADef,
+    ButtonDef,
+    IconDef,
+  ];
 
   // show unpublished content when in preview mode.
   const canShowContent = content || isPreviewing();
