@@ -37,6 +37,23 @@ export const OfferCardDef: RegisteredComponent = {
         },
       ],
     },
+    {
+      name: "button",
+      type: "object",
+      required: false,
+      subFields: [
+        {
+          name: "href",
+          type: "url",
+          required: true,
+        },
+        {
+          name: "text",
+          type: "string",
+          required: true,
+        },
+      ],
+    },
   ],
   canHaveChildren: true,
 };
