@@ -33,7 +33,7 @@ h6 {
 }
 
 p {
-  @apply !text-neutral-600 !leading-relaxed;
+  @apply text-neutral-600 !leading-relaxed;
 }
 
 @keyframes underline-grow {

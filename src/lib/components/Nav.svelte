@@ -18,6 +18,7 @@
         />
       </a>
       <ul class="justify-end flex gap-6 md:gap-8 items-center">
+        <li><a href="/projekte">Projekte</a></li>
         <li><a href="/ueber">Über</a></li>
         <li><a href="/leistungen">Leistungen</a></li>
         <li>

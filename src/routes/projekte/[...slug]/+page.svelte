@@ -1,21 +1,14 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
   import { PUBLIC_BUILDER_API_KEY } from "$env/static/public";
-  import Button from "$lib/components/Button.svelte";
-  import Container from "$lib/components/Container.svelte";
-  import Icon from "$lib/components/Icon.svelte";
-  import OverflowScrollContainer from "$lib/components/OverflowScrollContainer.svelte";
   import ProjectItemHeader2 from "$lib/components/ProjectItemHeader2.svelte";
-  import Section from "$lib/components/Section.svelte";
   import { ContainerDef } from "$lib/defs/container.builder.js";
-  import { FlexDef } from "$lib/defs/flex.builder.js";
   import { HeaderDef } from "$lib/defs/header.builder.js";
   import { HRDef } from "$lib/defs/hr.builder.js";
   import { IconDef } from "$lib/defs/icon.builder.js";
   import { OverflowScrollContainerDef } from "$lib/defs/overflowScrollContainer.builder.js";
   import { SectionDef } from "$lib/defs/section.builder.js";
   import { isPreviewing, Content } from "@builder.io/sdk-svelte";
-  import { Image } from "@unpic/svelte";
 
   export let data;
   const { content } = data;

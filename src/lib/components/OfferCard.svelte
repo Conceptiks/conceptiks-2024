@@ -1,11 +1,16 @@
 <script lang="ts">
   import { Image } from "@unpic/svelte";
+  import Button from "./Button.svelte";
 
   export let title: string = "";
   export let description: string = "";
   export let img: {
     src: string;
     alt: string;
+  };
+  export let button: {
+    text: string;
+    href: string;
   };
 </script>
 
@@ -19,4 +24,9 @@
   <p class="!text-white">
     {description}
   </p>
+  {#if button}
+    <div class="mt-4">
+      <Button href="{button.href}">{button.text}</Button>
+    </div>
+  {/if}
 </div>
