@@ -12,7 +12,7 @@
 
   // this data comes from the function in `+page.server.js`, which runs on the server only
   export let data;
-  const { content } = data;
+  $: ({ content } = data);
   const customComponents = [
     ContainerDef,
     HeaderDef,
@@ -25,7 +25,7 @@
   ];
 
   // show unpublished content when in preview mode.
-  const canShowContent = content || isPreviewing();
+  $: canShowContent = content || isPreviewing();
 </script>
 
 <svelte:head>

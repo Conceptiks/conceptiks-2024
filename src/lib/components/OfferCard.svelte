@@ -9,7 +9,7 @@
   };
 </script>
 
-<div class="bg-blue-600 text-white p-8 pb-24 w-full grow">
+<div class="bg-blue-600 text-white p-8 w-full grow">
   <div class="w-10 h-10 mb-5">
     {#if img}
       <Image layout="fullWidth" {...img} />
