@@ -22,7 +22,7 @@
   class="py-6 w-full px-4 border border-neutral-200 rounded flex flex-col gap-x-4 gap-y-2 items-center justify-center"
 >
   <div class="flex items-center h-12 w-12">
-    <Image {...img} layout="fullWidth" objectFit="contain" />
+    <Image {...img} layout="fullWidth" height="{48}" objectFit="contain" />
   </div>
   {#if title}
     <h6 class="font-bold">{title}</h6>
