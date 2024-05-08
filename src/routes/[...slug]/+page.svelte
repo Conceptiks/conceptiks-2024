@@ -1,10 +1,10 @@
 <script lang="ts">
   import { PUBLIC_BUILDER_API_KEY } from "$env/static/public";
-  import Icon from "$lib/components/Icon.svelte";
   import { ButtonDef } from "$lib/defs/button.builder.js";
   import { CardDef } from "$lib/defs/card.builder.js";
   import { ContainerDef } from "$lib/defs/container.builder.js";
   import { CTADef } from "$lib/defs/cta.builder.js";
+  import { FeatureCardDef } from "$lib/defs/featureCard.builder.js";
   import { FlexDef } from "$lib/defs/flex.builder.js";
   import { HeaderDef } from "$lib/defs/header.builder.js";
   import { IconDef } from "$lib/defs/icon.builder.js";
@@ -29,6 +29,7 @@
     FlexDef,
     SectionIntroDef,
     CardDef,
+    FeatureCardDef,
   ];
 
   // show unpublished content when in preview mode.
