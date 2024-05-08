@@ -1,15 +1,24 @@
 <script lang="ts">
   import type { ComponentProps } from "svelte";
   import Icon from "./Icon.svelte";
+  import { fade } from "svelte/transition";
 
   export let icon: ComponentProps<Icon> | undefined = undefined;
   export let title: string = "";
   export let description: string | undefined = undefined;
   export let optional: boolean = false;
+
+  let open = false;
 </script>
 
-<div class="p-4 rounded relative w-full border border-neutral-200">
-  <div class="inline-flex gap-2 items-center">
+<details
+  on:toggle="{(e) => {
+    if (!e.target) return;
+    open = e.target.open;
+  }}"
+  class="rounded relative w-full border border-neutral-200 transition-all hover:border-neutral-400 cursor-pointer"
+>
+  <summary class="group p-4 flex gap-2 items-center">
     {#if icon}
       <Icon {...icon} />
     {/if}
@@ -22,8 +31,19 @@
         >optional</span
       >
     {/if}
-  </div>
+    {#if description}
+      {#if open}
+        <Icon iconClass="carbon:chevron-up" color="#888888" />
+      {:else}
+        <Icon iconClass="carbon:chevron-down" color="#888888" />
+      {/if}
+    {/if}
+  </summary>
   {#if description}
-    <p class="mt-2">{description}</p>
+    <div class="bg-neutral-100 p-4">
+      <p transition:fade="{{ duration: 300 }}">
+        {description}
+      </p>
+    </div>
   {/if}
-</div>
+</details>
