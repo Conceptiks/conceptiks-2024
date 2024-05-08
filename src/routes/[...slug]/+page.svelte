@@ -6,13 +6,16 @@
   import { CTADef } from "$lib/defs/cta.builder.js";
   import { FeatureCardDef } from "$lib/defs/featureCard.builder.js";
   import { FlexDef } from "$lib/defs/flex.builder.js";
+  import { GridDef } from "$lib/defs/grid.builder.js";
   import { HeaderDef } from "$lib/defs/header.builder.js";
   import { IconDef } from "$lib/defs/icon.builder.js";
+  import { LogoItemDef } from "$lib/defs/logoItem.builder.js";
   import { MasonryGridDef } from "$lib/defs/masonryGrid.builder.js";
   import { OfferCardDef } from "$lib/defs/offerCard.builder.js";
   import { SectionDef } from "$lib/defs/section.builder.js";
   import { SectionIntroDef } from "$lib/defs/sectionIntro.builder.js";
   import { isPreviewing, Content } from "@builder.io/sdk-svelte";
+  import { Image } from "@unpic/svelte";
 
   // this data comes from the function in `+page.server.js`, which runs on the server only
   export let data;
@@ -30,6 +33,8 @@
     SectionIntroDef,
     CardDef,
     FeatureCardDef,
+    LogoItemDef,
+    GridDef,
   ];
 
   // show unpublished content when in preview mode.
