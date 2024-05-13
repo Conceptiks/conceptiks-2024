@@ -7,6 +7,11 @@ export const OfferCardDef: RegisteredComponent = {
   noWrap: true,
   inputs: [
     {
+      name: "backgroundColor",
+      type: "color",
+      defaultValue: "#ff0000",
+    },
+    {
       name: "title",
       type: "string",
       defaultValue: "Offer Title",

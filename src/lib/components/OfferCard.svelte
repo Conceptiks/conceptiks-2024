@@ -12,9 +12,13 @@
     text: string;
     href: string;
   };
+  export let backgroundColor: string = "#0000ff";
 </script>
 
-<div class="bg-blue-600 text-white p-8 w-full grow">
+<div
+  class="text-white p-8 w-full grow flex flex-col justify-end"
+  style="background-color:{backgroundColor}"
+>
   <div class="w-10 h-10 mb-5">
     {#if img}
       <Image layout="fullWidth" {...img} />
