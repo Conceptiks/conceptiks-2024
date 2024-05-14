@@ -13,6 +13,11 @@ export const LogoItemDef: RegisteredComponent = {
       required: false,
     },
     {
+      name: "description",
+      type: "string",
+      required: false,
+    },
+    {
       name: "href",
       type: "url",
       required: false,
