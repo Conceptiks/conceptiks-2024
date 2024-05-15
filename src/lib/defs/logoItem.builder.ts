@@ -13,6 +13,12 @@ export const LogoItemDef: RegisteredComponent = {
       required: false,
     },
     {
+      name: "border",
+      type: "boolean",
+      required: false,
+      defaultValue: true,
+    },
+    {
       name: "description",
       type: "string",
       required: false,

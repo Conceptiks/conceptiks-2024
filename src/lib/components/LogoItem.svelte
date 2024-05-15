@@ -1,9 +1,11 @@
 <script lang="ts">
   import { Image } from "@unpic/svelte";
+  import { twMerge } from "tailwind-merge";
 
   export let href: string | undefined = undefined;
   export let title: string | undefined = undefined;
   export let description: string | undefined = undefined;
+  export let border: boolean = true;
   export let img: {
     alt: string;
     src: string;
@@ -19,7 +21,10 @@
 <svelte:element
   this="{as}"
   href="{href ?? undefined}"
-  class="py-6 w-full px-4 border border-neutral-200 rounded flex flex-col gap-x-4 gap-y-2 items-center justify-center"
+  class="{twMerge(
+    'w-full  rounded flex flex-col gap-x-4 gap-y-2 items-center justify-center',
+    border ? 'border border-neutral-200 py-6 px-4 ' : ''
+  )}"
 >
   <div class="flex items-center h-12 w-1/2">
     <Image {...img} layout="fullWidth" height="{48}" objectFit="contain" />
