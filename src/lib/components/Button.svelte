@@ -14,7 +14,7 @@
   this="{as}"
   href="{href ?? undefined}"
   class="{twMerge(
-    'inline-flex items-center gap-x-2 bg-neutral-900 hover:bg-black text-white border hover:border-white/80 border-transparent',
+    'inline-flex items-center gap-x-2 bg-primary-400 hover:bg-primary-700 transition-all rounded-md shadow-sm text-white border hover:border-black/35 border-transparent',
     size,
     className
   )}"

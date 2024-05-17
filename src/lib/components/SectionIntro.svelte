@@ -121,7 +121,7 @@
 <style lang="postcss">
   h4 {
     &.primary {
-      @apply text-blue-500;
+      @apply text-primary-500;
     }
   }
 </style>

@@ -16,7 +16,7 @@
 </script>
 
 <div
-  class="text-white p-8 w-full grow flex flex-col justify-end"
+  class="text-white p-8 w-full grow flex flex-col justify-end rounded-lg drop-shadow-lg border-white/10 border"
   style="background-color:{backgroundColor}"
 >
   <div class="w-10 h-10 mb-5">

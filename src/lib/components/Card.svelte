@@ -16,7 +16,7 @@
     if (!e.target) return;
     open = e.target.open;
   }}"
-  class="rounded relative w-full border border-neutral-200 transition-all hover:border-neutral-400 cursor-pointer"
+  class="rounded-md shadow-md relative w-full border border-neutral-100 transition-all hover:border-neutral-200 cursor-pointer"
 >
   <summary class="group p-4 flex gap-2 items-center">
     {#if icon}
@@ -27,7 +27,7 @@
     </p>
     {#if optional}
       <span
-        class="text-white px-1.5 py-0.5 leading-normal bg-blue-600 rounded text-xs"
+        class="text-white px-1.5 py-0.5 leading-normal bg-primary-600 rounded text-xs"
         >optional</span
       >
     {/if}

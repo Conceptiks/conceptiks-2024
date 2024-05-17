@@ -77,7 +77,7 @@
 <Container>
   <fieldset class="flex flex-wrap gap-y-1 gap-x-2 lg:gap-3 mb-8 lg:mb-4">
     <legend aria-label="Filter" class="sr-only hidden">Filter</legend>
-    <div class="-mx-2">
+    <div class="">
       <input
         type="radio"
         name="categories"
@@ -89,18 +89,18 @@
       <!-- label styling based on peer state -->
       <label
         for="all"
-        class="text-sm peer-checked:bg-primary-500 peer-checked:font-bold uppercase py-1 px-2 hover:cursor-pointer"
+        class="text-sm peer-checked:font-bold capitalize py-1 px-2 hover:cursor-pointer rounded-lg bg-neutral-100 hover:bg-neutral-200 transition-all peer-checked:bg-primary peer-checked:text-white"
         >Alle</label
       >
     </div>
     <!-- {#if categories.length > 0} -->
     {#each categories as category}
-      <span
+      <!-- <span
         class="last:hidden text-neutral-300"
         aria-hidden="true"
         role="presentation">/</span
-      >
-      <div class="-mx-2">
+      > -->
+      <div class="">
         <input
           type="radio"
           name="categories"
@@ -112,7 +112,7 @@
         <!-- label styling based on peer state -->
         <label
           for="{category}"
-          class="text-sm peer-checked:bg-primary-500 peer-checked:font-bold uppercase py-1 px-2 hover:cursor-pointer"
+          class="text-sm peer-checked:font-bold capitalize py-1 px-2 hover:cursor-pointer rounded-lg border border-neutral-200 bg-neutral-100 hover:bg-neutral-200 transition-all peer-checked:bg-primary peer-checked:text-white"
           >{category}</label
         >
       </div>
@@ -134,7 +134,7 @@
       bind:masonryHeight="{height}"
     >
       <a
-        class="block relative overflow-clip group shadow-neutral-100 shadow-lg"
+        class="block relative overflow-clip group shadow-neutral-100 drop-shadow-xl rounded-lg"
         href="{item.reference.value.data.url}"
       >
         <div class=" overflow-clip block w-full bg-white">
@@ -149,7 +149,7 @@
           />
         </div>
         <div
-          class="bg-white group-hover:bg-black transition-all group-hover:text-white drop-shadow-md absolute bottom-4 left-4 z-10 py-2 px-4"
+          class="bg-white/75 border border-white/10 backdrop-blur-sm group-hover:bg-black rounded-md transition-all group-hover:text-white drop-shadow-md absolute bottom-4 left-4 z-10 py-2 px-4"
         >
           <h5>{item.reference.value.data.title}</h5>
         </div>
