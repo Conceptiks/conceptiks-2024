@@ -7,7 +7,7 @@ export const HeaderDef: RegisteredComponent = {
   inputs: [
     {
       name: "title",
-      type: "longText",
+      type: "richText",
       defaultValue: "Hello, world!",
     },
     {

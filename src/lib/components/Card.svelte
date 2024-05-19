@@ -27,7 +27,7 @@
     </p>
     {#if optional}
       <span
-        class="text-white px-1.5 py-0.5 leading-normal bg-primary-600 rounded text-xs"
+        class="text-white px-1.5 py-0.5 leading-normal bg-primary rounded text-xs"
         >optional</span
       >
     {/if}

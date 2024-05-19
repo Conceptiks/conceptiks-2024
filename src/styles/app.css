@@ -6,6 +6,7 @@
 
 html,
 body {
+  @apply bg-white;
 }
 
 h1 {
@@ -13,7 +14,7 @@ h1 {
 }
 
 h2 {
-  @apply text-xl sm:text-3xl mb-2;
+  @apply text-xl sm:text-3xl mb-2 font-semibold;
 }
 
 h3 {

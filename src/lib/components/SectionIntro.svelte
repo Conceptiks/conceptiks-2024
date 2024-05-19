@@ -39,8 +39,7 @@
       {#if title}
         <h2
           class="{twMerge(
-            "{textStyle === 'dark' ? 'text-black' : 'text-white'}",
-            'font-normal'
+            "{textStyle === 'dark' ? 'text-black' : 'text-white'}"
           )}"
         >
           {title}
@@ -121,7 +120,7 @@
 <style lang="postcss">
   h4 {
     &.primary {
-      @apply text-primary-500;
+      @apply text-primary;
     }
   }
 </style>
