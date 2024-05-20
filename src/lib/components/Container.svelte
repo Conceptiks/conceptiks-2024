@@ -8,7 +8,7 @@
 
 <div
   class="{twMerge(
-    'px-8 mx-auto',
+    'px-8 mx-auto w-full',
     slim ? 'max-w-screen-lg' : 'max-w-screen-xl',
     className
   )}"
