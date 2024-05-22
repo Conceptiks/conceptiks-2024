@@ -6,12 +6,12 @@ export const IconDef: RegisteredComponent = {
   name: "Icon",
   description:
     "Generic icon component that can be used to render any icon from the Carbon icon library",
-  docsLink: "https://icones.js.org/collection/carbon",
+  docsLink: "https://icon-sets.iconify.design/carbon/",
   inputs: [
     {
       name: "iconClass",
       type: "string",
-      helperText: "See here https://icones.js.org/collection/carbon",
+      helperText: "See here https://icon-sets.iconify.design/carbon/",
       defaultValue: "carbon:arrow-right",
     },
     {
@@ -25,7 +25,8 @@ export const IconDef: RegisteredComponent = {
       name: "color",
       type: "color",
       helperText: "Color of the icon",
-      defaultValue: "#000000",
+      defaultValue: "#004fff",
+      required: false,
     },
   ],
 };

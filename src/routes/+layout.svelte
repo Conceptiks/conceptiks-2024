@@ -1,7 +1,7 @@
 <script lang="ts">
   import Nav from "$lib/components/Nav.svelte";
-  import { Image } from "@unpic/svelte";
   import "../styles/app.css";
+  import "iconify-icon";
   import Container from "$lib/components/Container.svelte";
 </script>
 
