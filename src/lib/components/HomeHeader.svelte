@@ -211,9 +211,6 @@
 </header>
 
 <style lang="postcss">
-  .highlight {
-    @apply bg-gradient-to-br  from-purple-500 to-primary bg-clip-text text-transparent;
-  }
   .container {
     width: 100%;
     height: 60vh;

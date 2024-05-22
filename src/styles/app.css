@@ -36,6 +36,10 @@ p {
   @apply text-neutral-600 !leading-relaxed;
 }
 
+span.highlight {
+  @apply bg-gradient-to-br  from-purple-500 to-primary bg-clip-text text-transparent;
+}
+
 @keyframes underline-grow {
   0% {
     width: 0;

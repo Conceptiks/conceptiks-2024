@@ -7,7 +7,7 @@
 </script>
 
 <header
-  class="pb-32 pt-44 lg:pb-52 lg:pt-72 bg-gradient-to-b from-white to-neutral-100"
+  class="pb-24 pt-32 lg:pb-44 lg:pt-64 bg-gradient-to-b from-white to-neutral-100"
 >
   <Container>
     <div class="grid grid-cols-12 gap-8 relative">

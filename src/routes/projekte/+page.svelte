@@ -5,9 +5,11 @@
   import { CTADef } from "$lib/defs/cta.builder.js";
   import { FlexDef } from "$lib/defs/flex.builder.js";
   import { HeaderDef } from "$lib/defs/header.builder.js";
+  import { HRDef } from "$lib/defs/hr.builder.js";
   import { IconDef } from "$lib/defs/icon.builder.js";
   import { MasonryGridDef } from "$lib/defs/masonryGrid.builder.js";
   import { OfferCardDef } from "$lib/defs/offerCard.builder.js";
+  import { SectionDef } from "$lib/defs/section.builder.js";
   import { isPreviewing, Content } from "@builder.io/sdk-svelte";
 
   // this data comes from the function in `+page.server.js`, which runs on the server only
@@ -22,6 +24,8 @@
     IconDef,
     OfferCardDef,
     FlexDef,
+    SectionDef,
+    HRDef,
   ];
 
   // show unpublished content when in preview mode.
