@@ -89,7 +89,7 @@
       <!-- label styling based on peer state -->
       <label
         for="all"
-        class="text-sm peer-checked:font-bold capitalize py-1 px-2 hover:cursor-pointer rounded-lg bg-neutral-100 hover:bg-neutral-200 transition-all peer-checked:bg-primary peer-checked:text-white"
+        class="text-sm peer-checked:font-bold capitalize py-1 px-2 hover:cursor-pointer rounded-md bg-neutral-100 hover:bg-neutral-200 transition-all peer-checked:bg-gradient-to-br from-purple-500 to-primary peer-checked:text-white"
         >Alle</label
       >
     </div>
@@ -112,7 +112,7 @@
         <!-- label styling based on peer state -->
         <label
           for="{category}"
-          class="text-sm peer-checked:font-bold capitalize py-1 px-2 hover:cursor-pointer rounded-lg border border-neutral-200 bg-neutral-100 hover:bg-neutral-200 transition-all peer-checked:bg-primary peer-checked:text-white"
+          class="text-sm peer-checked:font-bold capitalize py-1 px-2 hover:cursor-pointer rounded-md bg-neutral-100 hover:bg-neutral-200 transition-all peer-checked:bg-gradient-to-br from-purple-500 to-primary peer-checked:text-white"
           >{category}</label
         >
       </div>
