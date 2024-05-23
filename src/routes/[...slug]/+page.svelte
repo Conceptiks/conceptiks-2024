@@ -15,6 +15,7 @@
   import { LogoItemDef } from "$lib/defs/logoItem.builder.js";
   import { MasonryGridDef } from "$lib/defs/masonryGrid.builder.js";
   import { OfferCardDef } from "$lib/defs/offerCard.builder.js";
+  import { OverflowScrollContainerDef } from "$lib/defs/overflowScrollContainer.builder.js";
   import { SectionDef } from "$lib/defs/section.builder.js";
   import { SectionIntroDef } from "$lib/defs/sectionIntro.builder.js";
   import { isPreviewing, Content } from "@builder.io/sdk-svelte";
@@ -39,6 +40,7 @@
     GridDef,
     HRDef,
     HomeHeaderDef,
+    OverflowScrollContainerDef,
     LogoCloud1Def,
   ];
 

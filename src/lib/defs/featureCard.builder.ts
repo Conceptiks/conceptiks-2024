@@ -11,6 +11,11 @@ export const FeatureCardDef: RegisteredComponent = {
       required: true,
     },
     {
+      name: "decorationString",
+      type: "string",
+      required: false,
+    },
+    {
       name: "description",
       type: "string",
       required: false,

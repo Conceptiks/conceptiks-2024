@@ -8,7 +8,7 @@
   export let group: string;
 </script>
 
-<label class="">
+<label class="h-full">
   <input type="radio" {name} {value} class="peer group hidden" bind:group />
   <div
     role="radio"
@@ -19,7 +19,7 @@
       }
     }}"
     tabindex="0"
-    class="group p-4 flex gap-4 border shadow-sm bg-neutral-50 transition-all hover:bg-neutral-100 border-neutral-200 group peer-checked:border-primary peer-checked:border outline outline-4 outline-transparent focus:outline-primary/20 focus:ring-primary focus-visible:ring-black ring-1 ring-transparent rounded-lg cursor-pointer"
+    class="group p-4 h-full flex gap-4 border shadow-sm bg-neutral-50 transition-all hover:bg-neutral-100 border-neutral-200 group peer-checked:border-primary peer-checked:border outline outline-4 outline-transparent focus:outline-primary/20 focus:ring-primary focus-visible:ring-black ring-1 ring-transparent rounded-lg cursor-pointer"
   >
     <div class="">
       <div

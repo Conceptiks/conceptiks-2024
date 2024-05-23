@@ -54,7 +54,9 @@
       class="fixed bottom-0 w-full bg-gradient-to-t from-white to-transparent h-44 z-10 pointer-events-none"
     ></div>
     <div class="p-8 pb-28 overflow-y-auto h-full box-border">
-      <div class="grid grid-cols-1 gap-4 relative">
+      <div
+        class="grid grid-cols-1 md:grid-cols-2 items-start lg:grid-cols-1 gap-4 relative"
+      >
         {#each challenges as challenge}
           <Radio
             bind:group="{selected}"

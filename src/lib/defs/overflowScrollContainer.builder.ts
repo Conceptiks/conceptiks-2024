@@ -6,6 +6,11 @@ export const OverflowScrollContainerDef: RegisteredComponent = {
   name: "OverflowScrollContainer",
   inputs: [
     {
+      name: "containerSize",
+      type: "string",
+      enum: ["md", "lg"],
+    },
+    {
       name: "images",
       type: "list",
       subFields: [

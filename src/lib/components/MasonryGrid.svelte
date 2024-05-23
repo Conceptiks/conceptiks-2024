@@ -31,7 +31,7 @@
   import { Masonry } from "svelte-bricks";
   import Container from "./Container.svelte";
   export let items: MasonryItem[] = [];
-  let [minColWidth, maxColWidth, gap] = [400, 800, 24];
+  let [minColWidth, maxColWidth, gap] = [300, 800, 24];
   let width: number, height: number;
   let selectedCategory: string | null = null;
 

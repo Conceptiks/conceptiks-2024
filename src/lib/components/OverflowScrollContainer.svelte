@@ -4,6 +4,8 @@
   import { browser } from "$app/environment";
   import { Image } from "@unpic/svelte";
 
+  export let containerSize: "md" | "lg" = "md";
+
   export let className = "";
   export let images: {
     src: string;
@@ -24,7 +26,7 @@
       return {};
     }
 
-    const targetWidth = "calc((100vw - 980px) / 2)";
+    const targetWidth = `calc((100vw - ${containerSize === "md" ? "980px" : "1240px"}) / 2)`;
 
     timelineScrollContainer.style.scrollPaddingLeft = targetWidth;
     timelineScrollContainer.style.scrollPaddingRight = targetWidth;
@@ -72,9 +74,13 @@
     on:mousemove="{handleMouseMove}"
     on:mouseup="{handleMouseUp}"
   >
-    {#each images as { src, alt }}
-      <Image layout="fullWidth" {src} {alt}></Image>
-    {/each}
+    {#if images.length}
+      {#each images as { src, alt }}
+        <Image layout="fullWidth" {src} {alt}></Image>
+      {/each}
+    {:else}
+      <slot />
+    {/if}
   </div>
 </div>
 

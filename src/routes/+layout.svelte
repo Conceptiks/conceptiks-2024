@@ -7,7 +7,7 @@
 
 <Nav />
 <slot />
-<footer class="bg-primary text-light mt-20 pt-28">
+<footer class="bg-dark text-light mt-20 pt-28">
   <Container>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
       <div class="">
@@ -19,7 +19,7 @@
             objectFit="contain"
           />
         </div> -->
-        <p class="font-bold uppercase text-white">Conceptiks</p>
+        <p class="font-bold uppercase text-primary">Conceptiks</p>
 
         <ul class="mt-4 space-y-2 text-white">
           <li>c/o Maxim Tan</li>
@@ -28,7 +28,7 @@
         </ul>
       </div>
       <div class="">
-        <p class="font-bold uppercase text-white">Über uns</p>
+        <p class="font-bold uppercase text-primary">Über uns</p>
         <ul class="mt-4 space-y-2 text-white">
           <li><a href="/">Purpose und Motivation</a></li>
           <li><a href="/projekte">Partner</a></li>
@@ -38,7 +38,7 @@
         </ul>
       </div>
       <div class="">
-        <p class="font-bold uppercase text-white">Leistungen</p>
+        <p class="font-bold uppercase text-primary">Leistungen</p>
         <ul class="mt-4 space-y-2 text-white">
           <li><a href="/impressum">Impressum</a></li>
           <li><a href="/datenschutz">Datenschutz</a></li>
@@ -47,7 +47,7 @@
       </div>
     </div>
     <hr class="mt-20 border-white/20" />
-    <ul class="flex gap-4 gap-x-8 text-sm py-20 text-white font-bold">
+    <ul class="flex gap-4 gap-x-8 text-sm py-20 text-primary font-bold">
       <li><a href="/impressum">Impressum</a></li>
       <li><a href="/datenschutz">Datenschutz</a></li>
       <li>Cookie-Einstellungen</li>
