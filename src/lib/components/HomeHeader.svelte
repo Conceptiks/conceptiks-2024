@@ -5,18 +5,13 @@
   //get pointer position
   let x = 0;
   let y = 0;
-
-  $: console.log(x, y);
 </script>
 
-<svelte:window
+<header
   on:mousemove="{(e) => {
     x = e.clientX;
     y = e.clientY;
   }}"
-/>
-
-<header
   class="pt-40 py-20 md:pt-64 md:py-32 relative bg-gradient-to-b from-white to-neutral-100"
 >
   <div class="absolute overflow-clip inset-0 z-0 w-full h-full">
