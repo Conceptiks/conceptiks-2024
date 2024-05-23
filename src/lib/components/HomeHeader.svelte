@@ -1,9 +1,20 @@
 <script>
-  import { Image } from "@unpic/svelte";
   import Container from "./Container.svelte";
-  import Section from "./Section.svelte";
   import Form from "./form/Form.svelte";
+
+  //get pointer position
+  let x = 0;
+  let y = 0;
+
+  $: console.log(x, y);
 </script>
+
+<svelte:window
+  on:mousemove="{(e) => {
+    x = e.clientX;
+    y = e.clientY;
+  }}"
+/>
 
 <header
   class="pt-40 py-20 md:pt-64 md:py-32 relative bg-gradient-to-b from-white to-neutral-100"
@@ -15,172 +26,24 @@
         preserveAspectRatio="none"
         style="width: 100%; height: 100%;"
       >
-        <rect width="1440" height="600" fill="url(#gradient)"></rect>
-        <path
-          id="path1"
-          d="M0,300 Q360,240 720,320 T1440,300 V600 H0 Z"
-          style="fill: none; stroke: #a855f722; stroke-width: 1;"
-        >
-          <animate
-            attributeName="d"
-            dur="5s"
-            repeatCount="indefinite"
-            values="
-              M0,300 Q360,240 720,320 T1440,300 V600 H0 Z;
-              M0,300 Q360,220 720,340 T1440,300 V600 H0 Z;
-              M0,300 Q360,240 720,320 T1440,300 V600 H0 Z"
-          ></animate>
-        </path>
-        <path
-          id="path2"
-          d="M0,320 Q340,260 720,340 T1440,330 V600 H0 Z"
-          style="fill: none; stroke: #EB451122; stroke-width: 1;"
-        >
-          <animate
-            attributeName="d"
-            dur="6s"
-            repeatCount="indefinite"
-            values="
-              M0,320 Q340,260 720,340 T1440,330 V600 H0 Z;
-              M0,320 Q340,240 720,360 T1440,330 V600 H0 Z;
-              M0,320 Q340,260 720,340 T1440,330 V600 H0 Z"
-          ></animate>
-        </path>
-        <path
-          id="path3"
-          d="M0,340 Q380,280 720,360 T1440,360 V600 H0 Z"
-          style="fill: none; stroke: #a855f722; stroke-width: 1;"
-        >
-          <animate
-            attributeName="d"
-            dur="7s"
-            repeatCount="indefinite"
-            values="
-              M0,340 Q380,280 720,360 T1440,360 V600 H0 Z;
-              M0,340 Q380,260 720,380 T1440,360 V600 H0 Z;
-              M0,340 Q380,280 720,360 T1440,360 V600 H0 Z"
-          ></animate>
-        </path>
-        <path
-          id="path4"
-          d="M0,360 Q360,300 720,380 T1440,390 V600 H0 Z"
-          style="fill: none; stroke: #a855f722; stroke-width: 1;"
-        >
-          <animate
-            attributeName="d"
-            dur="8s"
-            repeatCount="indefinite"
-            values="
-              M0,360 Q360,300 720,380 T1440,390 V600 H0 Z;
-              M0,360 Q360,280 720,400 T1440,390 V600 H0 Z;
-              M0,360 Q360,300 720,380 T1440,390 V600 H0 Z"
-          ></animate>
-        </path>
-        <path
-          id="path5"
-          d="M0,380 Q340,320 720,400 T1440,420 V600 H0 Z"
-          style="fill: none; stroke: #EB451122; stroke-width: 1;"
-        >
-          <animate
-            attributeName="d"
-            dur="5s"
-            repeatCount="indefinite"
-            values="
-              M0,380 Q340,320 720,400 T1440,420 V600 H0 Z;
-              M0,380 Q340,300 720,420 T1440,420 V600 H0 Z;
-              M0,380 Q340,320 720,400 T1440,420 V600 H0 Z"
-          ></animate>
-        </path>
-        <path
-          id="path6"
-          d="M0,400 Q380,340 720,420 T1440,450 V600 H0 Z"
-          style="fill: none; stroke: #EB451122; stroke-width: 1;"
-        >
-          <animate
-            attributeName="d"
-            dur="6s"
-            repeatCount="indefinite"
-            values="
-              M0,400 Q380,340 720,420 T1440,450 V600 H0 Z;
-              M0,400 Q380,320 720,440 T1440,450 V600 H0 Z;
-              M0,400 Q380,340 720,420 T1440,450 V600 H0 Z"
-          ></animate>
-        </path>
-        <path
-          id="path7"
-          d="M0,420 Q360,360 720,440 T1440,480 V600 H0 Z"
-          style="fill: none; stroke: #a855f722; stroke-width: 1;"
-        >
-          <animate
-            attributeName="d"
-            dur="7s"
-            repeatCount="indefinite"
-            values="
-              M0,420 Q360,360 720,440 T1440,480 V600 H0 Z;
-              M0,420 Q360,340 720,460 T1440,480 V600 H0 Z;
-              M0,420 Q360,360 720,440 T1440,480 V600 H0 Z"
-          ></animate>
-        </path>
-        <path
-          id="path8"
-          d="M0,440 Q340,380 720,460 T1440,510 V600 H0 Z"
-          style="fill: none; stroke: #EB451122; stroke-width: 1;"
-        >
-          <animate
-            attributeName="d"
-            dur="8s"
-            repeatCount="indefinite"
-            values="
-              M0,440 Q340,380 720,460 T1440,510 V600 H0 Z;
-              M0,440 Q340,360 720,480 T1440,510 V600 H0 Z;
-              M0,440 Q340,380 720,460 T1440,510 V600 H0 Z"
-          ></animate>
-        </path>
-        <path
-          id="path9"
-          d="M0,460 Q380,400 720,480 T1440,540 V600 H0 Z"
-          style="fill: none; stroke: #a855f722; stroke-width: 1;"
-        >
-          <animate
-            attributeName="d"
-            dur="5s"
-            repeatCount="indefinite"
-            values="
-              M0,460 Q380,400 720,480 T1440,540 V600 H0 Z;
-              M0,460 Q380,380 720,500 T1440,540 V600 H0 Z;
-              M0,460 Q380,400 720,480 T1440,540 V600 H0 Z"
-          ></animate>
-        </path>
-        <path
-          id="path10"
-          d="M0,480 Q360,420 720,500 T1440,570 V600 H0 Z"
-          style="fill: none; stroke: #EB451122; stroke-width: 1;"
-        >
-          <animate
-            attributeName="d"
-            dur="6s"
-            repeatCount="indefinite"
-            values="
-              M0,480 Q360,420 720,500 T1440,570 V600 H0 Z;
-              M0,480 Q360,400 720,520 T1440,570 V600 H0 Z;
-              M0,480 Q360,420 720,500 T1440,570 V600 H0 Z"
-          ></animate>
-        </path>
-        <path
-          id="path11"
-          d="M0,500 Q340,440 720,520 T1440,600 V600 H0 Z"
-          style="fill: none; stroke: #a855f722; stroke-width: 1;"
-        >
-          <animate
-            attributeName="d"
-            dur="7s"
-            repeatCount="indefinite"
-            values="
-              M0,500 Q340,440 720,520 T1440,600 V600 H0 Z;
-              M0,500 Q340,420 720,540 T1440,600 V600 H0 Z;
-              M0,500 Q340,440 720,520 T1440,600 V600 H0 Z"
-          ></animate>
-        </path>
+        <defs>
+          <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#a855f788"></stop>
+            <stop offset="100%" stop-color="#EB451155"></stop>
+          </linearGradient>
+        </defs>
+        {#each Array(20) as _, i}
+          {@const baseHeight = 250 + 5 * (i + 1) * y * 0.01}
+          {@const baseX = 1 + 5 * i + 1 * x}
+          <path
+            id="path1"
+            d="M {i * -10} {baseHeight} Q {baseX} {baseHeight - 50 * 1} {baseX +
+              320} {baseHeight + 60 * i} T 1500 {baseHeight} V 600 H 0 Z"
+            style="fill: none; stroke: url(#gradient); stroke-width: 0.5;"
+            class=""
+          >
+          </path>
+        {/each}
       </svg>
     </div>
   </div>
@@ -225,16 +88,5 @@
     fill: none;
     stroke: #ff0000;
     stroke-width: 2;
-  }
-  @keyframes wave {
-    0% {
-      d: path("M0,300 Q360,240 720,320 T1440,300 V600 H0 Z");
-    }
-    50% {
-      d: path("M0,300 Q360,220 720,340 T1440,300 V600 H0 Z");
-    }
-    100% {
-      d: path("M0,300 Q360,240 720,320 T1440,300 V600 H0 Z");
-    }
   }
 </style>

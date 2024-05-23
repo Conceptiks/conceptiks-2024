@@ -4,7 +4,7 @@
   export let customers: { img: { src: string; alt: string } }[] = [];
 </script>
 
-<h6 class="font-bold text-black text-center">
+<h6 class="font-bold text-black">
   {title}
 </h6>
 
