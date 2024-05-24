@@ -1,5 +1,9 @@
 <script lang="ts">
   import { PUBLIC_BUILDER_API_KEY } from "$env/static/public";
+  import Container from "$lib/components/Container.svelte";
+  import Partners from "$lib/components/Partners.svelte";
+  import Reviews from "$lib/components/Reviews.svelte";
+  import Section from "$lib/components/Section.svelte";
   import { ButtonDef } from "$lib/defs/button.builder.js";
   import { CardDef } from "$lib/defs/card.builder.js";
   import { ContainerDef } from "$lib/defs/container.builder.js";
@@ -16,6 +20,8 @@
   import { MasonryGridDef } from "$lib/defs/masonryGrid.builder.js";
   import { OfferCardDef } from "$lib/defs/offerCard.builder.js";
   import { OverflowScrollContainerDef } from "$lib/defs/overflowScrollContainer.builder.js";
+  import { PartnersDef } from "$lib/defs/partners.builder.js";
+  import { ReviewsDef } from "$lib/defs/reviews.builder.js";
   import { SectionDef } from "$lib/defs/section.builder.js";
   import { SectionIntroDef } from "$lib/defs/sectionIntro.builder.js";
   import { isPreviewing, Content } from "@builder.io/sdk-svelte";
@@ -42,6 +48,8 @@
     HomeHeaderDef,
     OverflowScrollContainerDef,
     LogoCloud1Def,
+    ReviewsDef,
+    PartnersDef,
   ];
 
   // show unpublished content when in preview mode.

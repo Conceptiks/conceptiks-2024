@@ -3,8 +3,6 @@ import { fetchAndValidate } from "$lib/utils/validateAndFetch";
 import type { PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ url }) => {
-  console.log(url.pathname);
-
   const content = await fetchAndValidate(fetchOneEntry, "page", {
     options: getBuilderSearchParams(url.searchParams),
     userAttributes: {

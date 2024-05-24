@@ -39,7 +39,8 @@
       {#if title}
         <h2
           class="{twMerge(
-            "{textStyle === 'dark' ? 'text-black' : 'text-white'}"
+            textStyle === 'dark' ? 'text-black' : 'text-white',
+            'mt-2'
           )}"
         >
           {title}
