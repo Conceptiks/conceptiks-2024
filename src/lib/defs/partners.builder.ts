@@ -45,6 +45,12 @@ export const PartnersDef: RegisteredComponent = {
           description: "Link to partner",
           required: true,
         },
+        {
+          name: "description",
+          type: "string",
+          description: "Partner description",
+          required: false,
+        },
       ],
     },
   ],

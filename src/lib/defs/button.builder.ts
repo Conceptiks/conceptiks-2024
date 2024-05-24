@@ -12,6 +12,11 @@ export const ButtonDef: RegisteredComponent = {
       description: "Link to navigate to",
     },
     {
+      name: "style",
+      type: "string",
+      enum: ["primary", "black"],
+    },
+    {
       name: "size",
       type: "string",
       enum: ["sm", "md"],

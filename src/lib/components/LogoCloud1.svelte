@@ -19,7 +19,7 @@
         <div class="col-span-2 max-h-12 object-contain lg:col-span-1 w-full">
           <Image
             objectFit="contain"
-            class="  "
+            class="object-left"
             width="{150}"
             src="{img.src}"
             alt="{img.alt}"

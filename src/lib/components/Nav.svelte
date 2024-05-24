@@ -4,6 +4,7 @@
   import Button from "./Button.svelte";
   import { twMerge } from "tailwind-merge";
   import { afterNavigate } from "$app/navigation";
+  import { page } from "$app/stores";
 
   let scrollY = 0;
   let open = false;
@@ -13,6 +14,8 @@
   afterNavigate(() => {
     open = false;
   });
+
+  $: console.log($page.url.pathname);
 </script>
 
 <svelte:window bind:scrollY />
@@ -36,9 +39,28 @@
         />
       </a>
       <ul class="justify-end md:gap-6 items-center hidden md:flex">
-        <li><a href="/projekte">Projekte</a></li>
-        <li><a href="/ueber">Über</a></li>
-        <li><a href="/leistungen">Leistungen</a></li>
+        <li class="{twMerge($page.url.pathname === '/' ? 'font-bold' : '')}">
+          <a href="/">Home</a>
+        </li>
+        <li
+          class="{twMerge(
+            $page.url.pathname === '/projekte' ? 'font-bold' : ''
+          )}"
+        >
+          <a href="/projekte">Projekte</a>
+        </li>
+        <li
+          class="{twMerge($page.url.pathname === '/ueber' ? 'font-bold' : '')}"
+        >
+          <a href="/ueber">Über</a>
+        </li>
+        <li
+          class="{twMerge(
+            $page.url.pathname === '/leistungen' ? 'font-bold' : ''
+          )}"
+        >
+          <a href="/leistungen">Leistungen</a>
+        </li>
       </ul>
       <div class="inline-flex justify-end gap-x-2">
         <Button href="/kontakt" size="sm">Kontakt</Button>
@@ -70,9 +92,30 @@
     >
       <Container>
         <ul class="justify-end gap-6 md:items-center flex flex-col">
-          <li><a href="/projekte">Projekte</a></li>
-          <li><a href="/ueber">Über</a></li>
-          <li><a href="/leistungen">Leistungen</a></li>
+          <li class="{twMerge($page.url.pathname === '/' ? 'font-bold' : '')}">
+            <a href="/">Home</a>
+          </li>
+          <li
+            class="{twMerge(
+              $page.url.pathname === '/projekte' ? 'font-bold' : ''
+            )}"
+          >
+            <a href="/projekte">Projekte</a>
+          </li>
+          <li
+            class="{twMerge(
+              $page.url.pathname === '/ueber' ? 'font-bold' : ''
+            )}"
+          >
+            <a href="/ueber">Über</a>
+          </li>
+          <li
+            class="{twMerge(
+              $page.url.pathname === '/leistungen' ? 'font-bold' : ''
+            )}"
+          >
+            <a href="/leistungen">Leistungen</a>
+          </li>
         </ul>
       </Container>
     </div>
@@ -88,9 +131,8 @@
 
 <style lang="postcss">
   li {
-    @apply font-normal;
     a {
-      @apply px-2 py-1 bg-transparent hover:bg-neutral-100 rounded-md;
+      @apply px-2 py-1  rounded-md hover:underline;
     }
   }
 </style>

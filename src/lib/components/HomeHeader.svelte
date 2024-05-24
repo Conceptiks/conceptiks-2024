@@ -1,10 +1,23 @@
-<script>
+<script lang="ts">
+  import { twMerge } from "tailwind-merge";
   import Container from "./Container.svelte";
   import Form from "./form/Form.svelte";
 
   //get pointer position
   let x = 0;
   let y = 0;
+
+  export let title: string = "Wir entwickeln <br /> digitale Produkte.";
+  export let highlight: string = `<span class="highlight">
+            <br />
+            <span> Nutzerzentriert. </span>
+            <br />
+            <span> Analytisch. </span>
+            <br />
+            <span> Konversionsstark. </span>
+          </span>`;
+  export let description: string =
+    " Von der ersten Idee bis hin zur technischen Umsetzung, wir entwickeln nutzerorientierte Lösungen für digitale Welten.";
 </script>
 
 <header
@@ -13,7 +26,9 @@
     x = e.clientX;
     y = e.clientY;
   }}"
-  class="pt-40 md:pt-36 relative bg-gradient-to-b from-white to-neutral-100"
+  class="{twMerge(
+    'pt-40 md:py-36 relative bg-gradient-to-b from-white to-neutral-100'
+  )}"
 >
   <div class="absolute overflow-clip inset-0 z-0 w-full h-full">
     <div class="-bottom-1/3 absolute inset-0">
@@ -44,26 +59,20 @@
     </div>
   </div>
   <Container class="relative">
-    <div class="z-10 w-full grid grid-cols-12 gap-y-8 items-start">
+    <div class="z-10 w-full grid grid-cols-12 gap-y-8 items-center">
       <div class="col-span-12 lg:col-span-6 lg:mt-24 xl:mt-12">
         <h1 class="text-4xl sm:text-5xl md:text-5xl xl:text-7xl text-black">
-          Wir entwickeln <br /> digitale Produkte.
-          <span class="highlight">
-            <br />
-            <span> Nutzerzentriert. </span>
-            <br />
-            <span> Analytisch. </span>
-            <br />
-            <span> Konversionsstark. </span>
-          </span>
+          {@html title}
+          {#if highlight}
+            {@html highlight}
+          {/if}
         </h1>
         <p class="text-xl xl:text-2xl mt-8">
-          Von der ersten Idee bis hin zur technischen Umsetzung, wir entwickeln
-          nutzerorientierte Lösungen für digitale Welten
+          {@html description}
         </p>
       </div>
       <div
-        class="col-span-12 lg:col-span-6 xl:col-span-5 xl:col-start-8 h-[700px] sm:h-[650px] lg:h-[620px]"
+        class="col-span-12 lg:col-span-6 xl:col-span-5 xl:col-start-8 h-[700px]"
       >
         <Form />
       </div>
