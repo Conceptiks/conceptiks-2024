@@ -1,77 +1,121 @@
 <script lang="ts">
   import { twMerge } from "tailwind-merge";
-  import Radio from "../inputs/Radio.svelte";
   import StepHeader from "./StepHeader.svelte";
-  let challenges = [
+  import Icon from "../Icon.svelte";
+  import { crossfade } from "svelte/transition";
+  import { cubicInOut } from "svelte/easing";
+  import Step0 from "./Step0.svelte";
+  import { flip } from "svelte/animate";
+  import Step1 from "./Step1.svelte";
+  import Step2 from "./Step2.svelte";
+
+  let data = [
     {
-      title: "Mein Unternehmen/Angebot wird nicht gefunden",
-      description:
-        "Du kennst deine Zielgruppe, hast ein passendes Produkt, findest aber nur wenige Kunden.",
-      value: "not_visible",
+      title: "Lösungsfinder",
+      description: "Welche Herausforderung willst du meistern?",
+      props: {
+        selected: "",
+        valid: false,
+      },
+      component: Step0,
     },
     {
-      title: "Repetitive, analoge Prozesse sorgen für Ineffizienz",
-      description:
-        "Du oder deine Mitarbeiter beschäftigen sich häufig mit repetitiven Aufgaben, die eigentlich automatisch ablaufen könnten.",
-      value: "inefficient_processes",
+      title: "Schritt 2/3",
+      description: "Beschreibe deine Herausforderung im Detail",
+      props: {
+        selected: "",
+        valid: false,
+        details: "",
+        idea: "",
+      },
+      component: Step1,
     },
     {
-      title: "Veraltete Inhalte und unpassende (digitale) Selbstdarstellung",
-      description:
-        "Du denkst und handelst modern, der (digitale) Auftritt deines Unternehmens ist allerdings aus der Zeit gefallen.",
-      value: "oudated_branding",
-    },
-    {
-      title:
-        "Meine Website hat viele Besucher, aber wenige Zielabschlüsse (Conversions)",
-      description:
-        "Deine Website wird häufig besucht, aber nur wenige Besucher nutzen deine Webseite, um einen Kauf, eine Bestellung oder Buchung abzuschließen.",
-      value: "low_conversions",
-    },
-    {
-      title:
-        "Ich bin mir nicht sicher, ob meine neue digitale Geschäftsidee Potenzial hat",
-      description:
-        "Du hast eine Idee für ein digitales Produkt oder eine digitale Dienstleistung, bist dir aber unsicher, ob diese Idee auch wirklich erfolgreich sein kann.",
-      value: "unsure_idea",
+      title: "Schritt 3/3",
+      description: "Kontaktdaten",
+      props: {
+        selected: "",
+        valid: false,
+      },
+      component: Step2,
     },
   ];
 
-  let selected: string;
-  $: console.log(selected);
+  $: console.log(data);
+
+  const [send, receive] = crossfade({
+    duration: 300,
+    easing: cubicInOut,
+  });
+
+  let currentStep = 0;
+
+  const nextStep = () => {
+    currentStep++;
+  };
+
+  const previousStep = () => {
+    currentStep--;
+  };
 </script>
 
-<form class="relative border overflow-clip rounded-lg drop-shadow-xl">
+<form
+  class="relative border overflow-clip !max-h-[757px] rounded-lg drop-shadow-xl bg-white"
+>
   <StepHeader
-    title="Lösungsfinder"
-    description="Welche Herausforderung willst du meistern?"
+    title="{data[currentStep].title}"
+    description="{data[currentStep].description}"
+    numberOfSteps="{data.length}"
+    {currentStep}
+    {previousStep}
   />
-  <div class="bg-white h-[600px] relative">
+  {#each data as { props, component }, i (i)}
     <div
-      class="fixed w-full bg-gradient-to-b from-white to-transparent h-12 z-10"
-    ></div>
-    <div
-      class="fixed bottom-0 w-full bg-gradient-to-t from-white to-transparent h-44 z-10 pointer-events-none"
-    ></div>
-    <div class="p-8 pb-28 overflow-y-auto h-full box-border">
+      class="{twMerge(
+        'h-[600px] relative',
+        currentStep === i ? 'block ' : ' absolute opacity-0'
+      )}"
+      in:send="{{ key: i }}"
+      out:receive="{{ key: i }}"
+      animate:flip="{{ duration: 300 }}"
+    >
       <div
-        class="grid grid-cols-1 md:grid-cols-2 items-start lg:grid-cols-1 gap-4 relative"
-      >
-        {#each challenges as challenge}
-          <Radio
-            bind:group="{selected}"
-            title="{challenge.title}"
-            description="{challenge.description}"
-            value="{challenge.value}"
-            name="challenge"
-          />
-        {/each}
+        class="fixed w-full bg-gradient-to-b from-white to-transparent h-12 z-10 pointer-events-none"
+      ></div>
+      <div
+        class="fixed bottom-0 w-full bg-gradient-to-t from-white to-transparent h-44 z-10"
+      ></div>
+      <div class="p-8 pb-28 overflow-y-auto h-full">
+        <svelte:component this="{component}" bind:props context="{data}" />
+      </div>
+      <div class="w-full px-8 absolute bottom-8 z-20">
+        {#if data.length > currentStep + 1}
+          <button
+            type="button"
+            class="justify-center flex items-center gap-x-2"
+            on:click="{nextStep}"
+            disabled="{!props.valid}"
+          >
+            Weiter <Icon
+              iconClass="carbon:arrow-right"
+              color="{twMerge(!props.valid ? 'rgb(82,82,82)' : '#ffffff')}"
+            />
+          </button>
+        {:else}
+          <button
+            type="submit"
+            class="justify-center flex items-center gap-x-2"
+            disabled="{!props.valid}"
+          >
+            Absenden <Icon
+              iconClass="carbon:arrow-right"
+              color="{twMerge(!props.valid ? 'rgb(82,82,82)' : '#ffffff')}"
+            />
+          </button>
+        {/if}
       </div>
     </div>
-    <div class="w-full px-8 absolute bottom-8 z-20">
-      <button type="submit" disabled="{!selected}"> Lösung finden </button>
-    </div>
-  </div>
+  {/each}
 </form>
 
 <style lang="postcss">
