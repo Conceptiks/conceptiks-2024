@@ -1,7 +1,11 @@
 <script lang="ts">
   import Radio from "../inputs/Radio.svelte";
 
-  export let props: { valid: boolean; selected: string };
+  export let props: {
+    valid: boolean;
+    selected: string;
+    error: string | undefined;
+  };
 
   let challenges = [
     {
@@ -20,7 +24,7 @@
       title: "Veraltete Inhalte und unpassende (digitale) Selbstdarstellung",
       description:
         "Du denkst und handelst modern, der (digitale) Auftritt deines Unternehmens ist allerdings aus der Zeit gefallen.",
-      value: "oudated_branding",
+      value: "outdated_branding",
     },
     {
       title:
@@ -36,14 +40,21 @@
         "Du hast eine Idee für ein digitales Produkt oder eine digitale Dienstleistung, bist dir aber unsicher, ob diese Idee auch wirklich erfolgreich sein kann.",
       value: "unsure_idea",
     },
+    {
+      title: "Ich stehe vor einer anderen Herausforderung",
+      value: "other",
+    },
   ];
 
-  $: props.valid = props.selected ? true : false;
+  $: props.valid = true;
 </script>
 
 <div
   class="grid grid-cols-1 md:grid-cols-2 items-start lg:grid-cols-1 gap-4 relative"
 >
+  {#if props.error}
+    <div class="p-4 bg-red-500/10">Error: {props.error}</div>
+  {/if}
   {#each challenges as challenge}
     <Radio
       bind:group="{props.selected}"

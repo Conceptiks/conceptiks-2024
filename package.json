@@ -35,8 +35,11 @@
     "@tailwindcss/typography": "^0.5.12",
     "@unpic/svelte": "^0.0.51",
     "cross-env": "^7.0.3",
+    "firebase": "^10.12.2",
     "nodemailer": "^6.9.13",
+    "pipedrive": "^22.9.0",
     "svelte-bricks": "^0.2.1",
-    "tailwind-merge": "^2.2.2"
+    "tailwind-merge": "^2.2.2",
+    "zod": "^3.23.8"
   }
 }

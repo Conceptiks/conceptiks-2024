@@ -4,14 +4,97 @@
   };
   export let props: {
     name: string;
+    email: string;
+    phone: string;
+    companyName: string;
+    privacy: boolean;
     valid: boolean;
   };
 
-  $: props.valid = props.name ? true : false;
+  $: props.valid =
+    props.name && props.email && props.companyName && props.privacy
+      ? true
+      : false;
 </script>
 
-<div class="grid grid-cols-1 items-start gap-4 relative">
+<div class="grid grid-cols-1 items-start gap-8 relative">
+  <label>
+    <p class="font-bold text-black flex justify-between">
+      Dein Name <span class="text-sm text-neutral-500 font-normal"
+        >Pflichtangabe</span
+      >
+    </p>
+    <input
+      bind:value="{props.name}"
+      name="name"
+      class="w-full py-3 px-3 border border-black/10 rounded-lg"
+      placeholder="Max Mustermann"
+      required
+    />
+  </label>
+  <label>
+    <p class="font-bold text-black flex justify-between">
+      Deine E-Mail-Adresse <span class="text-sm text-neutral-500 font-normal"
+        >Pflichtangabe</span
+      >
+    </p>
+    <input
+      type="email"
+      name="email"
+      bind:value="{props.email}"
+      class="w-full py-3 px-3 border border-black/10 rounded-lg"
+      placeholder="mail@adresse.de"
+      required
+    />
+  </label>
+  <label>
+    <p class="font-bold text-black flex justify-between">Deine Telefonnummer</p>
+    <input
+      type="tel"
+      name="phone"
+      bind:value="{props.phone}"
+      class="w-full py-3 px-3 border border-black/10 rounded-lg"
+      placeholder="+49 176 12345678"
+    />
+  </label>
+  <label>
+    <p class="font-bold text-black flex justify-between">
+      Name deines Unternehmens <span
+        class="text-sm text-neutral-500 font-normal">Pflichtangabe</span
+      >
+    </p>
+    <input
+      type="text"
+      name="companyName"
+      bind:value="{props.companyName}"
+      class="w-full py-3 px-3 border border-black/10 rounded-lg"
+      placeholder="Musterfirma"
+      required
+    />
+  </label>
+  <!-- data privacy -->
   <div class="bg-neutral-100 rounded-lg p-4">
+    <p class="text-black font-bold">Datenschutz</p>
+    <label>
+      <input
+        type="checkbox"
+        name="privacy"
+        bind:checked="{props.privacy}"
+        required
+        class="rounded border-neutral-400"
+      />
+      <span class="ml-1"
+        >Ich habe die <a
+          href="/datenschutz"
+          class="text-primary hover:underline"
+          target="_blank">Datenschutzerklärung</a
+        > gelesen und erkläre mich mit der dort genannten Speicherung und Verarbeitung
+        meiner Daten einverstanden.</span
+      >
+    </label>
+  </div>
+
+  <!-- <div class="bg-neutral-100 rounded-lg p-4">
     <p class="text-black font-bold">Deine Herausforderung</p>
     <p>
       {#if context[0].props.selected === "not_visible"}
@@ -30,64 +113,5 @@
         Geschäftsidee mit unklarem Potenzial
       {/if}
     </p>
-  </div>
-  <div class="bg-blue-500/10 p-4 rounded-lg">
-    <p class="font-bold text-blue-500">Lösungsansatz</p>
-    {#if context[0].props.selected === "not_visible"}
-      <p>
-        Wenn du Probleme mit der Auffindbarkeit deines Angebotes hast, könntest
-        du von einer Suchmaschinen-Optimierung profitieren.
-      </p>
-    {/if}
-    {#if context[0].props.selected === "inefficient_processes"}
-      <p>
-        Heute sind weitaus mehr Prozesse digitalisierbar, als noch vor einigen
-        Jahren. In einem Beratungsgespräch mit uns könnten wir gemeinsam
-        herausfinden, welche Prozesse in deinem Unternehmen digitalisiert werden
-        können.
-      </p>
-    {/if}
-    {#if context[0].props.selected === "oudated_branding"}
-      <p>
-        Es gibt nur einen ersten Eindruck. Umso wichtiger also, dass dieser
-        Eindruck perfekt vermittelt wird. Wir helfen dir dabei, deinen
-        Internetauftritt oder dein Branding zu modernisieren, sowohl inhaltlich
-        als auch optisch.
-      </p>
-    {/if}
-    {#if context[0].props.selected === "low_conversions"}
-      <p>
-        Wenn deine Website/App viele Besucher hat, aber nur wenige davon zu
-        Kunden macht, könnte es an der Benutzerfreundlichkeit oder dem Design
-        liegen. Wir helfen dir dabei, deine Website zu optimieren.
-      </p>
-    {/if}
-    {#if context[0].props.selected === "unsure_idea"}
-      <p>
-        Mit Hilfe von Design Thinking und klickbaren Prototypen lässt sich dein
-        zukünftigen Produktes unaufwändig simulieren. So kannst du frühzeitig
-        erkennen, ob deine Idee Potenzial hat.
-      </p>
-    {/if}
-  </div>
-  <label>
-    <p class="font-bold text-black">Dein Name</p>
-    <input
-      bind:value="{props.name}"
-      name="name"
-      class="w-full py-3 px-3 border border-black/10 rounded-lg"
-      placeholder="Max Mustermann"
-      required
-    />
-  </label>
-  <label>
-    <p class="font-bold text-black">Deine E-Mail-Adresse</p>
-    <input
-      type="email"
-      name="email"
-      class="w-full py-3 px-3 border border-black/10 rounded-lg"
-      placeholder="mail@adresse.de"
-      required
-    />
-  </label>
+  </div> -->
 </div>

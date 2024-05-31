@@ -31,9 +31,11 @@
         )}"
       ></div>
     </div>
-    <div class="">
+    <div class="select-none">
       <span class="block font-semibold">{title}</span>
-      <span class="text-neutral-500">{description}</span>
+      {#if description}
+        <span class="text-neutral-500">{description}</span>
+      {/if}
     </div>
   </div>
 </label>

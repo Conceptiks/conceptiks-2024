@@ -1,9 +1,5 @@
 <script lang="ts">
   import { PUBLIC_BUILDER_API_KEY } from "$env/static/public";
-  import Container from "$lib/components/Container.svelte";
-  import Partners from "$lib/components/Partners.svelte";
-  import Reviews from "$lib/components/Reviews.svelte";
-  import Section from "$lib/components/Section.svelte";
   import { ButtonDef } from "$lib/defs/button.builder.js";
   import { CardDef } from "$lib/defs/card.builder.js";
   import { ContainerDef } from "$lib/defs/container.builder.js";
@@ -28,7 +24,9 @@
 
   // this data comes from the function in `+page.server.js`, which runs on the server only
   export let data;
+  export let form;
   $: ({ content } = data);
+
   const customComponents = [
     ContainerDef,
     HeaderDef,
@@ -69,6 +67,7 @@
       model="page"
       {content}
       {customComponents}
+      data="{form}"
       apiKey="{PUBLIC_BUILDER_API_KEY}"
     />
   {:else}

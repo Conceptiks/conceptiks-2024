@@ -19,6 +19,7 @@
   <div class="flex items-center justify-between gap-x-2">
     {#if currentStep > 0}
       <button
+        type="button"
         on:click="{previousStep}"
         class="rounded-full flex items-center gap-x-1 bg-neutral-100 py-1.5 text-sm leading-none px-2 border border-neutral-200"
       >
