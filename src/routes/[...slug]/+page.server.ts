@@ -9,6 +9,7 @@ import { z } from "zod";
 import { Pipedrive } from "$lib/services/pipedrive.adapter";
 import { addDoc, collection, getFirestore } from "firebase/firestore";
 import { firebase } from "$lib/services/firebase";
+import { verifyCaptcha } from "$lib/services/verifyCaptcha";
 
 const schema = z.object({
   challenge: z.enum(
@@ -46,6 +47,9 @@ const schema = z.object({
     required_error: "Bitte akzeptieren Sie die Datenschutzrichtlinien",
     invalid_type_error: "Bitte akzeptieren Sie die Datenschutzrichtlinien",
   }),
+  captchaToken: z.string({
+    required_error: "Bitte bestätigen Sie, dass Sie kein Roboter sind",
+  }),
 });
 
 export const load: PageServerLoad = async ({ url }) => {
@@ -69,6 +73,22 @@ export const actions = {
     const validation = schema.safeParse(dto);
     if (!validation.success) {
       return fail(400, { errors: validation.error.issues });
+    }
+
+    const captchaResponse = await verifyCaptcha({
+      formData: data,
+      errorMessages: {
+        rejected:
+          "Leider konnte Ihre Anfrage nicht verarbeitet werden. Bitte versuchen Sie es erneut.",
+        fetch:
+          "Leider konnte Ihre Anfrage nicht verarbeitet werden. Bitte versuchen Sie es erneut.",
+      },
+    });
+
+    if (captchaResponse.status !== 200) {
+      return fail(captchaResponse.status, {
+        errors: [{ path: ["captchaToken"], message: captchaResponse.message }],
+      });
     }
 
     const db = getFirestore(firebase);

@@ -9,6 +9,10 @@
   import Step1 from "./Step1.svelte";
   import Step2 from "./Step2.svelte";
   import { enhance } from "$app/forms";
+  import { onDestroy, onMount } from "svelte";
+  import { browser } from "$app/environment";
+  import { page } from "$app/stores";
+  import { PUBLIC_TURNSTILE_SITE_KEY } from "$env/static/public";
 
   let formData = [
     {
@@ -19,31 +23,56 @@
           value: "",
           error: undefined,
         },
-        valid: false,
       },
+      valid: false,
       component: Step0,
     },
     {
       title: "Schritt 2/3",
       description: "Beschreibe deine Herausforderung im Detail",
       props: {
-        valid: false,
-        details: "",
-        idea: "",
+        details: {
+          value: "",
+          error: undefined,
+        },
+        idea: {
+          value: "",
+          error: undefined,
+        },
       },
+      valid: false,
       component: Step1,
     },
     {
       title: "Schritt 3/3",
       description: "Kontaktaufnahme",
       props: {
-        valid: false,
-        name: "",
-        email: "",
-        phone: "",
-        companyName: "",
-        privacy: "",
+        name: {
+          value: "",
+          error: undefined,
+        },
+        email: {
+          value: "",
+          error: undefined,
+        },
+        phone: {
+          value: "",
+          error: undefined,
+        },
+        companyName: {
+          value: "",
+          error: undefined,
+        },
+        privacy: {
+          value: false,
+          error: undefined,
+        },
+        captchaToken: {
+          value: "",
+          error: undefined,
+        },
       },
+      valid: false,
       component: Step2,
     },
   ];
@@ -63,6 +92,7 @@
     currentStep--;
   };
 
+  let finished = false;
   let loading = false;
 
   const handleError = (err) => {
@@ -85,96 +115,170 @@
 
       formData = formData;
     });
+
+    formData.forEach((step, i) => {
+      for (const prop in step.props) {
+        if (step.props[prop].error) {
+          currentStep = i;
+          break;
+        }
+      }
+    });
   };
+
+  onDestroy(() => {
+    // destroy turnstile
+    if (browser && window.turnstile) {
+      window.turnstile.remove();
+    }
+  });
+
+  $: if ($page.status === 406) {
+    console.error("Captcha failed, resetting");
+    formData[2].props.captchaToken.value = null;
+    if (browser && window.turnstile) {
+      window.turnstile.reset("#captchaWidget");
+    }
+  }
+
+  onMount(() => {
+    // try to check if window.turnstile is present and if so, run the code below. otherwise, retry every 100ms for 5s.
+    let tries = 0;
+    const interval = setInterval(() => {
+      if (window.turnstile) {
+        clearInterval(interval);
+        window.turnstile.render("#captchaWidget", {
+          sitekey: PUBLIC_TURNSTILE_SITE_KEY,
+          callback: (token: string) => {
+            console.log(token);
+            formData[2].props.captchaToken.value = token;
+          },
+        });
+      } else {
+        tries++;
+        if (tries >= 50) {
+          clearInterval(interval);
+        }
+      }
+    }, 100);
+  });
 
   $: console.log(formData);
 </script>
+
+<svelte:head>
+  <script
+    src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
+  ></script>
+</svelte:head>
 
 <form
   action="/"
   method="POST"
   use:enhance="{({ formElement, formData, action, cancel, submitter }) => {
-    // `formElement` is this `<form>` element
-    // `formData` is its `FormData` object that's about to be submitted
-    // `action` is the URL to which the form is posted
-    // calling `cancel()` will prevent the submission
-    // `submitter` is the `HTMLElement` that caused the form to be submitted
-
     loading = true;
 
     return async ({ result, update }) => {
       console.log('result is', result);
       loading = false;
-      handleError(result.data);
-      // `result` is an `ActionResult` object
-      // `update` is a function which triggers the default logic that would be triggered if this callback wasn't set
+
+      if (!result.data) {
+        update({
+          invalidateAll: true,
+          reset: true,
+        });
+        finished = true;
+      } else {
+        handleError(result.data);
+      }
     };
   }}"
   class="relative border overflow-clip !max-h-[757px] rounded-lg drop-shadow-xl bg-white"
 >
-  <StepHeader
-    title="{formData[currentStep].title}"
-    description="{formData[currentStep].description}"
-    numberOfSteps="{formData.length}"
-    {currentStep}
-    {previousStep}
-  />
-  {#each formData as { props, component }, i (i)}
+  {#if finished}
     <div
-      class="{twMerge(
-        'h-[600px] relative',
-        currentStep === i ? 'block ' : ' absolute opacity-0'
-      )}"
-      in:send="{{ key: i }}"
-      out:receive="{{ key: i }}"
-      animate:flip="{{ duration: 300 }}"
+      class="p-8 text-center h-[728px] relative flex flex-col items-center justify-center"
     >
-      <div
-        class="fixed w-full bg-gradient-to-b from-white to-transparent h-12 z-10 pointer-events-none"
-      ></div>
-      <div
-        class="fixed bottom-0 w-full bg-gradient-to-t from-white to-transparent h-20 z-10"
-      ></div>
-      <div class="p-8 pb-28 overflow-y-auto h-full">
-        <svelte:component this="{component}" bind:props context="{formData}" />
-      </div>
-      <div class="w-full px-8 absolute bottom-8 z-20">
-        {#if formData.length > currentStep + 1}
-          <button
-            type="button"
-            class="justify-center flex items-center gap-x-2"
-            on:click="{nextStep}"
-            disabled="{!props.valid}"
-          >
-            Weiter <Icon
-              iconClass="carbon:arrow-right"
-              color="{twMerge(!props.valid ? 'rgb(82,82,82)' : '#ffffff')}"
-            />
-          </button>
-        {:else if !loading}
-          <button
-            type="submit"
-            class="justify-center flex items-center gap-x-2"
-            disabled="{!props.valid}"
-          >
-            Absenden <Icon
-              iconClass="carbon:arrow-right"
-              color="{twMerge(!props.valid ? 'rgb(82,82,82)' : '#ffffff')}"
-            />
-          </button>
-        {:else}
-          <button
-            type="button"
-            class="justify-center flex items-center gap-x-2"
-            disabled
-          >
-            Lädt...
-            <Icon iconClass="carbon:loading" color="#ffffff" />
-          </button>
-        {/if}
-      </div>
+      <Icon iconClass="carbon:email" color="#EB4511" customSize="100px" />
+      <h2 class="text-2xl font-bold">Vielen Dank für deine Anfrage!</h2>
+      <p
+        class="text-lg mt
+      -4"
+      >
+        Wir melden uns in Kürze bei dir.
+      </p>
     </div>
-  {/each}
+  {:else}
+    <StepHeader
+      title="{formData[currentStep].title}"
+      description="{formData[currentStep].description}"
+      numberOfSteps="{formData.length}"
+      {currentStep}
+      {previousStep}
+    />
+
+    {#each formData as { props, component, valid }, i (i)}
+      <div
+        class="{twMerge(
+          'h-[600px] relative',
+          currentStep === i ? 'block ' : ' absolute opacity-0'
+        )}"
+        in:send="{{ key: i }}"
+        out:receive="{{ key: i }}"
+        animate:flip="{{ duration: 300 }}"
+      >
+        <div
+          class="fixed w-full bg-gradient-to-b from-white to-transparent h-12 z-10 pointer-events-none"
+        ></div>
+        <div
+          class="fixed bottom-0 w-full bg-gradient-to-t from-white to-transparent h-20 z-10"
+        ></div>
+        <div class="p-8 pb-28 overflow-y-auto h-full">
+          <svelte:component
+            this="{component}"
+            bind:props
+            bind:valid
+            context="{formData}"
+          />
+        </div>
+        <div class="w-full px-8 absolute bottom-8 z-20">
+          {#if formData.length > currentStep + 1}
+            <button
+              type="button"
+              class="justify-center flex items-center gap-x-2"
+              on:click="{nextStep}"
+              disabled="{!valid}"
+            >
+              Weiter <Icon
+                iconClass="carbon:arrow-right"
+                color="{twMerge(!valid ? 'rgb(82,82,82)' : '#ffffff')}"
+              />
+            </button>
+          {:else if !loading}
+            <button
+              type="submit"
+              class="justify-center flex items-center gap-x-2"
+              disabled="{!valid}"
+            >
+              Absenden <Icon
+                iconClass="carbon:arrow-right"
+                color="{twMerge(!valid ? 'rgb(82,82,82)' : '#ffffff')}"
+              />
+            </button>
+          {:else}
+            <button
+              type="button"
+              class="justify-center flex items-center gap-x-2"
+              disabled
+            >
+              Lädt...
+              <Icon iconClass="carbon:loading" color="#ffffff" />
+            </button>
+          {/if}
+        </div>
+      </div>
+    {/each}
+  {/if}
 </form>
 
 <style lang="postcss">

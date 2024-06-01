@@ -1,18 +1,43 @@
 <script lang="ts">
+  import InputError from "./InputError.svelte";
+
   export let context: {
     [key: string]: any;
   };
   export let props: {
-    name: string;
-    email: string;
-    phone: string;
-    companyName: string;
-    privacy: boolean;
-    valid: boolean;
+    name: {
+      value: string;
+      error: string | undefined;
+    };
+    email: {
+      value: string;
+      error: string | undefined;
+    };
+    phone: {
+      value: string;
+      error: string | undefined;
+    };
+    companyName: {
+      value: string;
+      error: string | undefined;
+    };
+    privacy: {
+      value: boolean;
+      error: string | undefined;
+    };
+    captchaToken: {
+      value: string;
+      error: string | undefined;
+    };
   };
 
-  $: props.valid =
-    props.name && props.email && props.companyName && props.privacy
+  export let valid: boolean;
+
+  $: valid =
+    props.name.value &&
+    props.email.value &&
+    props.companyName.value &&
+    props.privacy.value
       ? true
       : false;
 </script>
@@ -25,12 +50,17 @@
       >
     </p>
     <input
-      bind:value="{props.name}"
+      bind:value="{props.name.value}"
       name="name"
       class="w-full py-3 px-3 border border-black/10 rounded-lg"
       placeholder="Max Mustermann"
       required
     />
+    {#if props.name.error && !valid}
+      <InputError>
+        {props.name.error}
+      </InputError>
+    {/if}
   </label>
   <label>
     <p class="font-bold text-black flex justify-between">
@@ -41,18 +71,23 @@
     <input
       type="email"
       name="email"
-      bind:value="{props.email}"
+      bind:value="{props.email.value}"
       class="w-full py-3 px-3 border border-black/10 rounded-lg"
       placeholder="mail@adresse.de"
       required
     />
+    {#if props.email.error && !valid}
+      <InputError>
+        {props.email.error}
+      </InputError>
+    {/if}
   </label>
   <label>
     <p class="font-bold text-black flex justify-between">Deine Telefonnummer</p>
     <input
       type="tel"
       name="phone"
-      bind:value="{props.phone}"
+      bind:value="{props.phone.value}"
       class="w-full py-3 px-3 border border-black/10 rounded-lg"
       placeholder="+49 176 12345678"
     />
@@ -66,11 +101,16 @@
     <input
       type="text"
       name="companyName"
-      bind:value="{props.companyName}"
+      bind:value="{props.companyName.value}"
       class="w-full py-3 px-3 border border-black/10 rounded-lg"
       placeholder="Musterfirma"
       required
     />
+    {#if props.companyName.error && !valid}
+      <InputError>
+        {props.companyName.error}
+      </InputError>
+    {/if}
   </label>
   <!-- data privacy -->
   <div class="bg-neutral-100 rounded-lg p-4">
@@ -79,7 +119,7 @@
       <input
         type="checkbox"
         name="privacy"
-        bind:checked="{props.privacy}"
+        bind:checked="{props.privacy.value}"
         required
         class="rounded border-neutral-400"
       />
@@ -92,6 +132,33 @@
         meiner Daten einverstanden.</span
       >
     </label>
+    {#if props.privacy.error && !valid}
+      <InputError>
+        {props.privacy.error}
+      </InputError>
+    {/if}
+  </div>
+  <div class="">
+    <label for="captchaWidget">
+      <p class="font-bold text-black flex justify-between">
+        Ich bin kein Roboter <span class="text-sm text-neutral-500 font-normal"
+          >Pflichtangabe</span
+        >
+      </p>
+      <div id="captchaWidget"></div>
+    </label>
+    <input
+      id="captchaToken"
+      type="text"
+      bind:value="{props.captchaToken.value}"
+      class="!invisible -z-50 !hidden mb-4"
+      name="captchaToken"
+    />
+    {#if props.captchaToken.error}
+      <InputError>
+        {props.captchaToken.error}
+      </InputError>
+    {/if}
   </div>
 
   <!-- <div class="bg-neutral-100 rounded-lg p-4">

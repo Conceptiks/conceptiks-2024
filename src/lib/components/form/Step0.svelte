@@ -1,11 +1,15 @@
 <script lang="ts">
+  import InputError from "./InputError.svelte";
   import Radio from "../inputs/Radio.svelte";
 
   export let props: {
-    valid: boolean;
-    selected: string;
-    error: string | undefined;
+    challenge: {
+      value: string;
+      error: string | undefined;
+    };
   };
+
+  export let valid: boolean;
 
   let challenges = [
     {
@@ -46,18 +50,20 @@
     },
   ];
 
-  $: props.valid = true;
+  $: valid = props.challenge.value ? true : false;
 </script>
 
 <div
   class="grid grid-cols-1 md:grid-cols-2 items-start lg:grid-cols-1 gap-4 relative"
 >
-  {#if props.error}
-    <div class="p-4 bg-red-500/10">Error: {props.error}</div>
+  {#if props.challenge.error && !valid}
+    <InputError>
+      {props.challenge.error}
+    </InputError>
   {/if}
   {#each challenges as challenge}
     <Radio
-      bind:group="{props.selected}"
+      bind:group="{props.challenge.value}"
       title="{challenge.title}"
       description="{challenge.description}"
       value="{challenge.value}"
