@@ -150,7 +150,6 @@
         window.turnstile.render("#captchaWidget", {
           sitekey: PUBLIC_TURNSTILE_SITE_KEY,
           callback: (token: string) => {
-            console.log(token);
             formData[2].props.captchaToken.value = token;
           },
         });
@@ -162,8 +161,6 @@
       }
     }, 100);
   });
-
-  $: console.log(formData);
 </script>
 
 <svelte:head>
