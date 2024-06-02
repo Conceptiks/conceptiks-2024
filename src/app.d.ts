@@ -11,6 +11,9 @@ declare global {
 
   interface Window {
     turnstile: any;
+    gtag: any;
+    CCM: any;
+    lintrk: any;
   }
 }
 

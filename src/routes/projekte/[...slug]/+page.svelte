@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { enhance } from "$app/forms";
   import { PUBLIC_BUILDER_API_KEY } from "$env/static/public";
   import ProjectItemHeader2 from "$lib/components/ProjectItemHeader2.svelte";
   import { ContainerDef } from "$lib/defs/container.builder.js";
@@ -44,6 +43,7 @@
   />
   <main>
     <Content
+      canTrack="{false}"
       model="portfolio-item"
       {customComponents}
       {content}

@@ -42,6 +42,7 @@
 <main>
   {#if canShowContent}
     <Content
+      canTrack="{false}"
       model="page"
       {content}
       {customComponents}

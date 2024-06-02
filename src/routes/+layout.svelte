@@ -3,7 +3,31 @@
   import "../styles/app.css";
   import "iconify-icon";
   import Container from "$lib/components/Container.svelte";
+  import { afterNavigate, beforeNavigate } from "$app/navigation";
+  import { onMount } from "svelte";
+  import ConsentHelper from "$lib/components/meta/ConsentHelper.svelte";
+
+  let root: HTMLElement | null = null;
+
+  onMount(() => {
+    root = document.querySelector("html");
+    root?.classList.add("smoothscroll");
+  });
+
+  // Unload the smoothscroll before page navigation to prevent the scroll animation when jumping between pages
+  beforeNavigate(() => {
+    root?.classList.remove("smoothscroll");
+  });
+
+  // Attaches the smoothscroll after page navigation
+  afterNavigate(() => {
+    root?.classList.add("smoothscroll");
+  });
 </script>
+
+<ConsentHelper />
+
+<slot />
 
 <Nav />
 <slot />
@@ -50,7 +74,11 @@
     <ul class="flex gap-4 gap-x-8 text-sm py-20 text-primary font-bold">
       <li><a href="/impressum">Impressum</a></li>
       <li><a href="/datenschutz">Datenschutz</a></li>
-      <li>Cookie-Einstellungen</li>
+      <li>
+        <button on:click="{() => window.CCM.openControlPanel()}">
+          Cookie-Einstellungen
+        </button>
+      </li>
     </ul>
   </Container>
 </footer>
