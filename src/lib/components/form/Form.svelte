@@ -94,13 +94,27 @@
 
   let finished = false;
   let loading = false;
+  let fatalError = false;
 
-  const handleError = (err) => {
+  const handleError = ({ data, status }) => {
+    if (status === 406 || status === 500) {
+      console.error("Captcha failed, resetting");
+      formData[2].props.captchaToken.value = null;
+      if (browser && window.turnstile) {
+        window.turnstile.reset("#captchaWidget");
+      }
+    }
+
+    if (!data.errors) {
+      fatalError = true;
+      return;
+    }
+
     const errors: {
       expected: any;
       path: string[];
       message: string;
-    }[] = err.errors;
+    }[] = data.errors;
 
     errors.forEach((error) => {
       const path = error.path[0];
@@ -127,23 +141,17 @@
   };
 
   onDestroy(() => {
+    console.log("destroyed");
     // destroy turnstile
     if (browser && window.turnstile) {
       window.turnstile.remove();
     }
   });
 
-  $: if ($page.status === 406) {
-    console.error("Captcha failed, resetting");
-    formData[2].props.captchaToken.value = null;
-    if (browser && window.turnstile) {
-      window.turnstile.reset("#captchaWidget");
-    }
-  }
-
   onMount(() => {
     // try to check if window.turnstile is present and if so, run the code below. otherwise, retry every 100ms for 5s.
     let tries = 0;
+    console.log("waiting for turnstile");
     const interval = setInterval(() => {
       if (window.turnstile) {
         clearInterval(interval);
@@ -186,15 +194,42 @@
         });
         finished = true;
       } else {
-        handleError(result.data);
+        handleError(result);
       }
     };
   }}"
   class="relative border overflow-clip !max-h-[757px] rounded-lg drop-shadow-xl bg-white"
 >
+  <div
+    class="{twMerge(
+      'p-8 text-center h-[728px] relative flex-col items-center justify-center',
+      fatalError ? 'flex' : 'hidden'
+    )}"
+  >
+    <Icon iconClass="carbon:warning" color="#EB4511" customSize="100px" />
+    <h2 class="text-2xl font-bold">
+      Bei der Übermittlung ist ein Fehler aufgetreten!
+    </h2>
+    <p
+      class="text-lg mt
+      -4"
+    >
+      Bitte probiere es erneut, die Formularfelder wurde nicht zurückgesetzt.
+    </p>
+    <button
+      type="button"
+      class="justify-center flex items-center gap-x-2"
+      on:click="{() => (fatalError = false)}"
+    >
+      Erneut versuchen <Icon iconClass="carbon:refresh" color="#ffffff" />
+    </button>
+  </div>
   {#if finished}
     <div
-      class="p-8 text-center h-[728px] relative flex flex-col items-center justify-center"
+      class="{twMerge(
+        'p-8 text-center h-[728px] relative flex-col items-center justify-center',
+        fatalError ? 'hidden' : 'flex'
+      )}"
     >
       <Icon iconClass="carbon:email" color="#EB4511" customSize="100px" />
       <h2 class="text-2xl font-bold">Vielen Dank für deine Anfrage!</h2>
@@ -206,75 +241,77 @@
       </p>
     </div>
   {:else}
-    <StepHeader
-      title="{formData[currentStep].title}"
-      description="{formData[currentStep].description}"
-      numberOfSteps="{formData.length}"
-      {currentStep}
-      {previousStep}
-    />
+    <div class="{twMerge(fatalError ? 'hidden' : 'block')}">
+      <StepHeader
+        title="{formData[currentStep].title}"
+        description="{formData[currentStep].description}"
+        numberOfSteps="{formData.length}"
+        {currentStep}
+        {previousStep}
+      />
 
-    {#each formData as { props, component, valid }, i (i)}
-      <div
-        class="{twMerge(
-          'h-[600px] relative',
-          currentStep === i ? 'block ' : ' absolute opacity-0'
-        )}"
-        in:send="{{ key: i }}"
-        out:receive="{{ key: i }}"
-        animate:flip="{{ duration: 300 }}"
-      >
+      {#each formData as { props, component, valid }, i (i)}
         <div
-          class="fixed w-full bg-gradient-to-b from-white to-transparent h-12 z-10 pointer-events-none"
-        ></div>
-        <div
-          class="fixed bottom-0 w-full bg-gradient-to-t from-white to-transparent h-20 z-10"
-        ></div>
-        <div class="p-8 pb-28 overflow-y-auto h-full">
-          <svelte:component
-            this="{component}"
-            bind:props
-            bind:valid
-            context="{formData}"
-          />
+          class="{twMerge(
+            'h-[600px] relative',
+            currentStep === i ? 'block ' : ' absolute opacity-0'
+          )}"
+          in:send="{{ key: i }}"
+          out:receive="{{ key: i }}"
+          animate:flip="{{ duration: 300 }}"
+        >
+          <div
+            class="fixed w-full bg-gradient-to-b from-white to-transparent h-12 z-10 pointer-events-none"
+          ></div>
+          <div
+            class="fixed bottom-0 w-full bg-gradient-to-t from-white to-transparent h-20 z-10"
+          ></div>
+          <div class="p-8 pb-28 overflow-y-auto h-full">
+            <svelte:component
+              this="{component}"
+              bind:props
+              bind:valid
+              context="{formData}"
+            />
+          </div>
+          <div class="w-full px-8 absolute bottom-8 z-20">
+            {#if formData.length > currentStep + 1}
+              <button
+                type="button"
+                class="justify-center flex items-center gap-x-2"
+                on:click="{nextStep}"
+                disabled="{!valid}"
+              >
+                Weiter <Icon
+                  iconClass="carbon:arrow-right"
+                  color="{twMerge(!valid ? 'rgb(82,82,82)' : '#ffffff')}"
+                />
+              </button>
+            {:else if !loading}
+              <button
+                type="submit"
+                class="justify-center flex items-center gap-x-2"
+                disabled="{!valid}"
+              >
+                Absenden <Icon
+                  iconClass="carbon:arrow-right"
+                  color="{twMerge(!valid ? 'rgb(82,82,82)' : '#ffffff')}"
+                />
+              </button>
+            {:else}
+              <button
+                type="button"
+                class="justify-center flex items-center gap-x-2"
+                disabled
+              >
+                Lädt...
+                <Icon iconClass="carbon:loading" color="#ffffff" />
+              </button>
+            {/if}
+          </div>
         </div>
-        <div class="w-full px-8 absolute bottom-8 z-20">
-          {#if formData.length > currentStep + 1}
-            <button
-              type="button"
-              class="justify-center flex items-center gap-x-2"
-              on:click="{nextStep}"
-              disabled="{!valid}"
-            >
-              Weiter <Icon
-                iconClass="carbon:arrow-right"
-                color="{twMerge(!valid ? 'rgb(82,82,82)' : '#ffffff')}"
-              />
-            </button>
-          {:else if !loading}
-            <button
-              type="submit"
-              class="justify-center flex items-center gap-x-2"
-              disabled="{!valid}"
-            >
-              Absenden <Icon
-                iconClass="carbon:arrow-right"
-                color="{twMerge(!valid ? 'rgb(82,82,82)' : '#ffffff')}"
-              />
-            </button>
-          {:else}
-            <button
-              type="button"
-              class="justify-center flex items-center gap-x-2"
-              disabled
-            >
-              Lädt...
-              <Icon iconClass="carbon:loading" color="#ffffff" />
-            </button>
-          {/if}
-        </div>
-      </div>
-    {/each}
+      {/each}
+    </div>
   {/if}
 </form>
 
