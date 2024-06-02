@@ -194,6 +194,11 @@
           window.gtag('event', 'conversion', {
             send_to: 'AW-11361528556/ahJxCKy8w-gYEOzVzKkq',
           });
+
+          // creaete new generate_lead event in ga4
+          window.gtag('event', 'generate_lead', {
+            send_to: 'G-8PF350N8FC',
+          });
         }
 
         finished = true;
