@@ -15,7 +15,7 @@ export const verifyCaptcha = async ({
 
   const turnstilePayload = new FormData();
   turnstilePayload.append("secret", PRIVATE_TURNSTILE_SECRET);
-  turnstilePayload.append("response", data.captchaToken);
+  turnstilePayload.append("response", data["cf-turnstile-response"]);
 
   try {
     const response = await fetch(url, {

@@ -27,8 +27,6 @@
 
 <ConsentHelper />
 
-<slot />
-
 <Nav />
 <slot />
 <footer class="bg-[#000000] text-light mt-20 pt-28">

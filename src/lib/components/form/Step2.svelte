@@ -151,13 +151,15 @@
       id="captchaToken"
       type="text"
       bind:value="{props.captchaToken.value}"
-      class="!invisible -z-50 !hidden mb-4"
+      class="!invisible -z-50 !hidden"
       name="captchaToken"
     />
     {#if props.captchaToken.error}
-      <InputError>
-        {props.captchaToken.error}
-      </InputError>
+      <div class="mt-4">
+        <InputError>
+          {props.captchaToken.error}
+        </InputError>
+      </div>
     {/if}
   </div>
 

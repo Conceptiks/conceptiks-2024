@@ -68,7 +68,7 @@
           error: undefined,
         },
         captchaToken: {
-          value: "",
+          value: null,
           error: undefined,
         },
       },
@@ -141,7 +141,6 @@
   };
 
   onDestroy(() => {
-    console.log("destroyed");
     // destroy turnstile
     if (browser && window.turnstile) {
       window.turnstile.remove();
@@ -151,7 +150,6 @@
   onMount(() => {
     // try to check if window.turnstile is present and if so, run the code below. otherwise, retry every 100ms for 5s.
     let tries = 0;
-    console.log("waiting for turnstile");
     const interval = setInterval(() => {
       if (window.turnstile) {
         clearInterval(interval);
@@ -184,7 +182,6 @@
     loading = true;
 
     return async ({ result, update }) => {
-      console.log('result is', result);
       loading = false;
 
       if (!result.data) {
@@ -193,7 +190,7 @@
           reset: true,
         });
 
-        if (window.gtag) {
+        if (window.gtag && browser) {
           window.gtag('event', 'conversion', {
             send_to: 'AW-11361528556/ahJxCKy8w-gYEOzVzKkq',
           });
@@ -257,7 +254,7 @@
         {previousStep}
       />
 
-      {#each formData as { props, component, valid }, i (i)}
+      {#each formData as { component, valid }, i (i)}
         <div
           class="{twMerge(
             'h-[600px] relative',
@@ -276,7 +273,7 @@
           <div class="p-8 pb-28 overflow-y-auto h-full">
             <svelte:component
               this="{component}"
-              bind:props
+              bind:props="{formData[i].props}"
               bind:valid
               context="{formData}"
             />
