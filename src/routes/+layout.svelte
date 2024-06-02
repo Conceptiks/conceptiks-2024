@@ -64,9 +64,13 @@
       <div class="">
         <p class="font-bold uppercase text-primary">Leistungen</p>
         <ul class="mt-4 space-y-2 text-white">
-          <li><a href="/impressum">Impressum</a></li>
-          <li><a href="/datenschutz">Datenschutz</a></li>
-          <li>Cookie-Einstellungen</li>
+          <li><a href="/leistungen#development">Webentwicklung</a></li>
+          <li>
+            <a href="/leistungen#ui-ux">User-Experience & Interface Design</a>
+          </li>
+          <li>
+            <a href="/leistungen#branding">Branding & Corporate Design</a>
+          </li>
         </ul>
       </div>
     </div>
@@ -74,7 +78,7 @@
     <ul class="flex gap-4 gap-x-8 text-sm py-20 text-primary font-bold">
       <li><a href="/impressum">Impressum</a></li>
       <li><a href="/datenschutz">Datenschutz</a></li>
-      <li>
+      <li class="hover:cursor-pointer">
         <button on:click="{() => window.CCM.openControlPanel()}">
           Cookie-Einstellungen
         </button>

@@ -192,6 +192,13 @@
           invalidateAll: true,
           reset: true,
         });
+
+        if (window.gtag) {
+          window.gtag('event', 'conversion', {
+            send_to: 'AW-11361528556/ahJxCKy8w-gYEOzVzKkq',
+          });
+        }
+
         finished = true;
       } else {
         handleError(result);
