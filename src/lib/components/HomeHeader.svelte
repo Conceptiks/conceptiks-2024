@@ -72,7 +72,7 @@
         </p>
       </div>
       <div
-        class="col-span-12 lg:col-span-6 xl:col-span-5 xl:col-start-8 h-[700px]"
+        class="col-span-12 lg:col-span-6 xl:col-span-5 xl:col-start-8 h-[700px] -mx-6 sm:mx-0"
       >
         <Form />
       </div>

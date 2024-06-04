@@ -4,4 +4,5 @@ import HomeHeader from "$lib/components/HomeHeader.svelte";
 export const HomeHeaderDef: RegisteredComponent = {
   component: HomeHeader,
   name: "HomeHeader",
+  noWrap: true,
 };

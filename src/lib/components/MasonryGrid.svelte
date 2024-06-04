@@ -122,38 +122,33 @@
   {#if !filteredItems || filteredItems.length === 0}
     <p>Loading...</p>
   {:else}
-    <Masonry
-      animate="{true}"
-      idKey="id"
-      let:item
-      items="{filteredItems}"
-      {minColWidth}
-      {maxColWidth}
-      {gap}
-      bind:masonryWidth="{width}"
-      bind:masonryHeight="{height}"
-    >
-      <a
-        class="block relative overflow-clip group shadow-neutral-100 drop-shadow-xl rounded-lg"
-        href="{item.reference.value.data.url}"
-      >
-        <div class=" overflow-clip block w-full bg-white">
-          <Image
-            objectFit="cover"
-            layout="constrained"
-            width="{800}"
-            aspectRatio="{parseFloat(item.aspectRatio)}"
-            class="hover:scale-105 scale-100 transition-transform duration-300 ease-in-out"
-            src="{item.reference.value.data.thumbnail}"
-            alt="{item.reference.value.data.title} mockup"
-          />
+    <div class="grid grid-cols-1 gap-2 sm:grid-cols-2 items-start">
+      {#each filteredItems as item}
+        <div class="">
+          <a
+            class="block relative overflow-clip group shadow-neutral-100 drop-shadow-xl rounded-lg peer"
+            href="{item.reference.value.data.url}"
+          >
+            <div class=" overflow-clip block w-full bg-white">
+              <Image
+                objectFit="cover"
+                layout="constrained"
+                width="{800}"
+                aspectRatio="{parseFloat(item.aspectRatio)}"
+                class="hover:scale-105 scale-100 transition-transform duration-300 ease-in-out"
+                src="{item.reference.value.data.thumbnail}"
+                alt="{item.reference.value.data.title} mockup"
+              />
+            </div>
+          </a>
+          <div class="mt-4 mb-8 peer-hover:[&>strong]:text-primary">
+            <strong class="text-xl transition-all"
+              >{item.reference.value.data.title}</strong
+            >
+            <p class="">{item.reference.value.data.description}</p>
+          </div>
         </div>
-        <div
-          class="bg-white/75 border border-white/10 backdrop-blur-sm group-hover:bg-black rounded-md transition-all group-hover:text-white drop-shadow-md absolute bottom-4 left-4 z-10 py-2 px-4"
-        >
-          <h5>{item.reference.value.data.title}</h5>
-        </div>
-      </a>
-    </Masonry>
+      {/each}
+    </div>
   {/if}
 </Container>

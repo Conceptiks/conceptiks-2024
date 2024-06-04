@@ -11,7 +11,6 @@
   import { enhance } from "$app/forms";
   import { onDestroy, onMount } from "svelte";
   import { browser } from "$app/environment";
-  import { page } from "$app/stores";
   import { PUBLIC_TURNSTILE_SITE_KEY } from "$env/static/public";
 
   let formData = [

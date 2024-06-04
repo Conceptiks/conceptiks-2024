@@ -34,7 +34,7 @@
     <div class="select-none">
       <span class="block font-semibold">{title}</span>
       {#if description}
-        <span class="text-neutral-500">{description}</span>
+        <span class="hidden sm:block text-neutral-500">{description}</span>
       {/if}
     </div>
   </div>
