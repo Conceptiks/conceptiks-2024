@@ -17,6 +17,7 @@
   import { OfferCardDef } from "$lib/defs/offerCard.builder.js";
   import { OverflowScrollContainerDef } from "$lib/defs/overflowScrollContainer.builder.js";
   import { PartnersDef } from "$lib/defs/partners.builder.js";
+  import { PictureDef } from "$lib/defs/picture.builder.js";
   import { ReviewsDef } from "$lib/defs/reviews.builder.js";
   import { SectionDef } from "$lib/defs/section.builder.js";
   import { SectionIntroDef } from "$lib/defs/sectionIntro.builder.js";
@@ -48,6 +49,7 @@
     LogoCloud1Def,
     ReviewsDef,
     PartnersDef,
+    PictureDef,
   ];
 
   // show unpublished content when in preview mode.

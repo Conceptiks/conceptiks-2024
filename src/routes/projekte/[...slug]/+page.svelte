@@ -7,6 +7,7 @@
   import { HRDef } from "$lib/defs/hr.builder.js";
   import { IconDef } from "$lib/defs/icon.builder.js";
   import { OverflowScrollContainerDef } from "$lib/defs/overflowScrollContainer.builder.js";
+  import { PictureDef } from "$lib/defs/picture.builder.js";
   import { SectionDef } from "$lib/defs/section.builder.js";
   import { isPreviewing, Content } from "@builder.io/sdk-svelte";
 
@@ -20,6 +21,7 @@
     IconDef,
     GridDef,
     OverflowScrollContainerDef,
+    PictureDef,
   ];
 
   const canShowContent = content || isPreviewing();
