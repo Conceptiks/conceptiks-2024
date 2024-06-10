@@ -19,6 +19,7 @@
   import { PartnersDef } from "$lib/defs/partners.builder.js";
   import { PictureDef } from "$lib/defs/picture.builder.js";
   import { ReviewsDef } from "$lib/defs/reviews.builder.js";
+  import { RichTextDef } from "$lib/defs/richText.builder.js";
   import { SectionDef } from "$lib/defs/section.builder.js";
   import { SectionIntroDef } from "$lib/defs/sectionIntro.builder.js";
   import { isPreviewing, Content } from "@builder.io/sdk-svelte";
@@ -50,6 +51,7 @@
     ReviewsDef,
     PartnersDef,
     PictureDef,
+    RichTextDef,
   ];
 
   // show unpublished content when in preview mode.
