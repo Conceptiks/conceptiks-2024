@@ -14,8 +14,6 @@
   afterNavigate(() => {
     open = false;
   });
-
-  $: console.log($page.url.pathname);
 </script>
 
 <svelte:window bind:scrollY />
