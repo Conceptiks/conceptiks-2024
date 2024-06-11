@@ -65,7 +65,7 @@
 
   // Register your DPS's here
   const googleAds = new DPS("Google Ads Conversion Tracking");
-  const googleAnalytics = new DPS("Google Analytics");
+  const googleAnalytics = new DPS("Google Analytics 4");
   const hotJar = new DPS("Hotjar");
   const linkedIn = new DPS("LinkedIn Ads");
 
@@ -84,8 +84,20 @@
         const acceptedEmbeddings = window.CCM.acceptedEmbeddings;
         clearInterval(intervalId);
 
-        googleAds.monitorChange(acceptedEmbeddings);
-        googleAnalytics.monitorChange(acceptedEmbeddings);
+        googleAds.monitorChange(acceptedEmbeddings, {
+          onConsent: () => {
+            window.gtag("consent", "update", {
+              ad_storage: "granted",
+            });
+          },
+        });
+        googleAnalytics.monitorChange(acceptedEmbeddings, {
+          onConsent: () => {
+            window.gtag("consent", "update", {
+              analytics_storage: "granted",
+            });
+          },
+        });
         hotJar.monitorChange(acceptedEmbeddings);
         linkedIn.monitorChange(acceptedEmbeddings);
       } else {

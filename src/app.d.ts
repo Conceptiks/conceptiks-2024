@@ -14,6 +14,7 @@ declare global {
     gtag: any;
     CCM: any;
     lintrk: any;
+    dataLayer: any[];
   }
 }
 
