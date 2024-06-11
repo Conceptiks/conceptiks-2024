@@ -90,11 +90,21 @@
               ad_storage: "granted",
             });
           },
+          onRevokation: () => {
+            window.gtag("consent", "update", {
+              ad_storage: "denied",
+            });
+          },
         });
         googleAnalytics.monitorChange(acceptedEmbeddings, {
           onConsent: () => {
             window.gtag("consent", "update", {
               analytics_storage: "granted",
+            });
+          },
+          onRevokation: () => {
+            window.gtag("consent", "update", {
+              analytics_storage: "denied",
             });
           },
         });
