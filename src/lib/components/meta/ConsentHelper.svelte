@@ -64,8 +64,9 @@
   }
 
   // Register your DPS's here
-  const googleAds = new DPS("Google Ads Conversion Tracking");
-  const googleAnalytics = new DPS("Google Analytics 4");
+  const googleAds = new DPS("Google Ads Conversion Tracking"); // ad_storage & ad_user_data
+  const googleAdsRemarketing = new DPS("Google Ads Remarketing"); //ad_personalization
+  const googleAnalytics = new DPS("Google Analytics 4"); //analytics_storage
   const hotJar = new DPS("Hotjar");
   const linkedIn = new DPS("LinkedIn Ads");
 
@@ -84,30 +85,11 @@
         const acceptedEmbeddings = window.CCM.acceptedEmbeddings;
         clearInterval(intervalId);
 
-        googleAds.monitorChange(acceptedEmbeddings, {
-          onConsent: () => {
-            window.gtag("consent", "update", {
-              ad_storage: "granted",
-            });
-          },
-          onRevokation: () => {
-            window.gtag("consent", "update", {
-              ad_storage: "denied",
-            });
-          },
-        });
-        googleAnalytics.monitorChange(acceptedEmbeddings, {
-          onConsent: () => {
-            window.gtag("consent", "update", {
-              analytics_storage: "granted",
-            });
-          },
-          onRevokation: () => {
-            window.gtag("consent", "update", {
-              analytics_storage: "denied",
-            });
-          },
-        });
+        // For these, conset singlas are configured to be sent via CCM19
+        googleAds.monitorChange(acceptedEmbeddings);
+        googleAdsRemarketing.monitorChange(acceptedEmbeddings);
+        googleAnalytics.monitorChange(acceptedEmbeddings);
+
         hotJar.monitorChange(acceptedEmbeddings);
         linkedIn.monitorChange(acceptedEmbeddings);
       } else {

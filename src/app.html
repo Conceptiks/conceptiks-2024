@@ -36,11 +36,10 @@
         dataLayer.push(arguments);
       }
       gtag("js", new Date());
+      gtag("set", "url_passthrough", true);
       gtag("config", "G-8PF350N8FC", {
         server_container_url: "https://ctm.conceptiks.com",
       });
-
-      console.error("sst loaded");
     </script>
     <!-- GOOGLE ANALYTICS TRACKING END -->
 
