@@ -1,4 +1,4 @@
-@import url("../fonts/general-sans/general-sans.css");
+@import url("../fonts/source-sans-3/source-sans-3.css");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -6,6 +6,7 @@
 html,
 body {
   @apply bg-white;
+  font-family: "Source Sans 3", sans-serif;
 }
 
 h1 {

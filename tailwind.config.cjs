@@ -24,7 +24,7 @@ module.exports = {
       "black": "#0E0004"
     },
     fontFamily: {
-      sans: ['Source Sans Pro', ...defaultTheme.fontFamily.sans],
+      sans: ['Source Sans 3', ...defaultTheme.fontFamily.sans],
     },
   },
   corePlugins: {
