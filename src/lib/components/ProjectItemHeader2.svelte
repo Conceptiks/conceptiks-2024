@@ -55,7 +55,7 @@
             target="_blank"
             referrerpolicy="no-referrer"
             style="{`background-color: ${brandColor ?? '#111111'}`}"
-            class="flex items-center gap-x-2 shrink-0 border border-white/25 text-white text-xs font-semibold uppercase py-1 px-2"
+            class="flex items-center gap-x-2 shrink-0 border border-white/25 hover:bg-white/10 text-white text-xs font-semibold uppercase py-1 px-2"
             aria-hidden="true"
             role="presentation"
             >Live ansehen <Icon
