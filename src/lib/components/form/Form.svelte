@@ -15,7 +15,7 @@
 
   let formData = [
     {
-      title: "Lösungsfinder",
+      title: "Projekt anfragen",
       description: "Welche Herausforderung willst du meistern?",
       props: {
         challenge: {

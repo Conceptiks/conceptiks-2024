@@ -7,7 +7,7 @@
 <HomeHeader
   title="<h1><span class='highlight'>Kontaktiere</span> uns."
   highlight="{null}"
-  description="Wenn du nach einer Lösung für Herausforderungen in deinem Unternehmen suchst, nutze unseren Lösungsfinder. Wenn du andere Fragen oder Anregungen hast, dann kontaktiere uns über unser Kontaktformular."
+  description="Wenn du nach einer Lösung für Herausforderungen in deinem Unternehmen suchst, nutze unser Projektanfrage-Tool. Wenn du andere Fragen oder Anregungen hast, dann kontaktiere uns über unser Kontaktformular."
 ></HomeHeader>
 
 <div class="my-40">
