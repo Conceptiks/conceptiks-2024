@@ -44,6 +44,7 @@
     description="{content.data.description}"
     categories="{content.data.category}"
     brandColor="{content.data.brandColor}"
+    projectUrl="{content.data.projectUrl}"
   />
   <main>
     <Content

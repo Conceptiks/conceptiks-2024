@@ -1,10 +1,11 @@
 <script lang="ts">
   import { Image } from "@unpic/svelte";
-  import Hr from "./HR.svelte";
+  import Icon from "./Icon.svelte";
   export let img: {
     src: string;
     alt: string;
   };
+  export let projectUrl: string | undefined = undefined;
   export let title: string;
   export let description: string;
   export let brandColor: string | undefined = undefined;
@@ -36,16 +37,34 @@
     <h6 class="mt-1 sm:mt-2 max-w-sm text-pretty">
       {description}
     </h6>
-    {#if categories.length > 0}
+    {#if categories.length > 0 || projectUrl}
       <div class="flex overflow-x-auto gap-2 mt-8 -mx-6 px-6">
-        {#each categories as category}
-          <span
+        {#if categories.length}
+          {#each categories as category}
+            <span
+              style="{`background-color: ${brandColor ?? '#111111'}`}"
+              class="shrink-0 border border-white/25 text-white text-xs font-semibold uppercase py-1 px-2"
+              aria-hidden="true"
+              role="presentation">{category}</span
+            >
+          {/each}
+        {/if}
+        {#if projectUrl}
+          <a
+            href="{projectUrl}"
+            target="_blank"
+            referrerpolicy="no-referrer"
             style="{`background-color: ${brandColor ?? '#111111'}`}"
             class="shrink-0 border border-white/25 text-white text-xs font-semibold uppercase py-1 px-2"
             aria-hidden="true"
-            role="presentation">{category}</span
+            role="presentation"
+            >Live ansehen <Icon
+              size="sm"
+              color="#ffffff"
+              iconClass="carbon:arrow-up-right"
+            /></a
           >
-        {/each}
+        {/if}
       </div>
     {/if}
   </div>
