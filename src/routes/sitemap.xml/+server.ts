@@ -33,8 +33,6 @@ export const GET = (async ({ fetch }) => {
   const cmsPages = await getAllCmsEntries("page", fetch);
   const cmsPortfolioItems = await getAllCmsEntries("portfolio-item", fetch);
 
-  console.log("cmsPages", cmsPages);
-
   const body = sitemap(["kontakt", ...cmsPages, ...cmsPortfolioItems]);
 
   const headers = {
