@@ -12,24 +12,22 @@
   export let categories: string[] = [];
 </script>
 
-<header class="relative flex flex-wrap items-stretch">
+<header class="relative flex flex-wrap items-start mt-20">
   <div class="w-full lg:w-1/2 bg-neutral-200">
-    <div style="{`background-color: ${brandColor ?? '#111111'}`}">
-      <div
-        class="aspect-w-6 aspect-h-6 sm:aspect-h-4 lg:aspect-h-5 xl:aspect-h-4 bg-neutral-200"
-      >
-        <Image
-          layout="fullWidth"
-          objectFit="cover"
-          src="{img.src}"
-          alt="{img.alt}"
-        />
-      </div>
+    <div
+      class="aspect-w-6 aspect-h-6 sm:aspect-h-4 lg:aspect-h-5 xl:aspect-h-4 bg-neutral-200"
+    >
+      <Image
+        layout="fullWidth"
+        objectFit="cover"
+        src="{img.src}"
+        alt="{img.alt}"
+      />
     </div>
   </div>
   <div
     style="{`background-color: ${brandColor ?? '#111111'}`}"
-    class="p-6 sm:p-8 md:p-10 lg:p-12 xl:p-20 inline-flex lg:flex flex-col items-start justify-end w-auto mx-8 lg:mx-0 -mt-20 z-10 lg:mt-0 lg:w-1/2 max-h-max text-white"
+    class="p-6 sm:p-8 md:p-10 lg:p-12 xl:p-20 inline-flex lg:flex flex-col items-start justify-end w-auto mx-8 lg:mx-0 -mt-20 z-10 lg:mt-0 lg:w-1/2 lg:absolute lg:right-0 lg:top-0 lg:bottom-0 text-white"
   >
     <h1 class="grow-0">
       {title}

@@ -10,6 +10,7 @@ import { Pipedrive } from "$lib/services/pipedrive.adapter";
 import { addDoc, collection, getFirestore } from "firebase/firestore";
 import { firebase } from "$lib/services/firebase";
 import { verifyCaptcha } from "$lib/services/verifyCaptcha";
+import { sendMail } from "$lib/services/sendMail";
 
 const schema = z.object({
   challenge: z.enum(
@@ -105,9 +106,35 @@ export const actions = {
 
     try {
       const leadRes = await pd.submit(dto);
-      return;
     } catch (err) {
       return err;
+    }
+
+    let resAdminMail;
+
+    try {
+      resAdminMail = await sendMail({
+        replyTo: dto.email,
+        to: "kontakt@conceptiks.com",
+        templateId: "d-9c36d4c899a04213b22c744ad039606b",
+        variables: {
+          x_challenge: dto.challenge,
+          x_company_name: dto.companyName,
+          x_details: dto.details,
+          x_email: dto.email,
+          x_idea: dto.idea,
+          x_name: dto.name,
+          x_phone: dto.phone,
+          x_privacy: dto.privacy,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+			return fail(400, { errors: validation.error.issues });
+    }
+
+    if (resAdminMail.status >= 400) {
+      return fail(resAdminMail.status);
     }
   },
 } satisfies Actions;
