@@ -30,7 +30,7 @@
   </div>
   <div
     style="background-color: {panelColor}"
-    class="z-10 -mt-20 mx-6 inline-flex w-auto flex-col items-start justify-end rounded-2xl p-8 text-white sm:mx-8 sm:p-10 md:p-12 lg:absolute lg:right-0 lg:top-0 lg:bottom-0 lg:mx-0 lg:mt-0 lg:flex lg:w-1/2 lg:rounded-none lg:p-16 xl:p-20"
+    class="z-10 -mt-20 mx-6 inline-flex w-auto max-w-[calc(100%-3rem)] min-w-0 flex-col items-start justify-end rounded-2xl p-8 text-white sm:mx-8 sm:max-w-[calc(100%-4rem)] sm:p-10 md:p-12 lg:absolute lg:right-0 lg:top-0 lg:bottom-0 lg:mx-0 lg:mt-0 lg:flex lg:w-1/2 lg:max-w-none lg:rounded-none lg:p-16 xl:p-20"
   >
     <h1 class="grow-0 text-white">
       {title}
@@ -41,7 +41,8 @@
       </p>
     {/if}
     {#if categories.length > 0 || projectUrl}
-      <div class="-mx-6 mt-8 flex gap-2 overflow-x-auto px-6">
+      <!-- min-w-0 so this scroller can shrink instead of widening the panel. -->
+      <div class="-mx-6 mt-8 flex min-w-0 max-w-full gap-2 overflow-x-auto px-6">
         {#each categories as category}
           <span
             class="shrink-0 rounded-full border border-white/25 px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-white/90"

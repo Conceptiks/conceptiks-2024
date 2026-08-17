@@ -65,22 +65,48 @@
     );
   };
 
+  let captchaWidget: HTMLDivElement;
+  let captchaRendered = false;
+
+  const renderCaptcha = () => {
+    if (captchaRendered || !window.turnstile) return;
+    captchaRendered = true;
+    window.turnstile.render("#captchaWidget", {
+      sitekey: PUBLIC_TURNSTILE_SITE_KEY,
+      callback: (token: string) => (captchaToken = token),
+    });
+  };
+
   onMount(() => {
+    // The form can start collapsed (mobile hero), and Turnstile renders badly
+    // into a display:none container — so wait until the widget is on screen.
+    // offsetParent is null while any ancestor is display:none.
+    const visible = () => !!captchaWidget?.offsetParent;
+
     // The Turnstile script loads async; poll briefly until its API is there.
     let tries = 0;
     const interval = setInterval(() => {
-      if (window.turnstile) {
+      if (window.turnstile && visible()) {
         clearInterval(interval);
-        window.turnstile.render("#captchaWidget", {
-          sitekey: PUBLIC_TURNSTILE_SITE_KEY,
-          callback: (token: string) => (captchaToken = token),
-        });
+        renderCaptcha();
       } else if (++tries >= 50) {
         clearInterval(interval);
       }
     }, 100);
 
-    return () => clearInterval(interval);
+    // Covers the case where the form is revealed after that window closes.
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) renderCaptcha();
+      },
+      { rootMargin: "200px" }
+    );
+    if (captchaWidget) observer.observe(captchaWidget);
+
+    return () => {
+      clearInterval(interval);
+      observer.disconnect();
+    };
   });
 
   onDestroy(() => {
@@ -264,7 +290,7 @@
       </div>
 
       <div class="sm:col-span-2">
-        <div id="captchaWidget"></div>
+        <div id="captchaWidget" bind:this="{captchaWidget}"></div>
         <input type="hidden" name="captchaToken" value="{captchaToken ?? ''}" />
         {#if errors.captchaToken}
           <div class="mt-2"><InputError>{errors.captchaToken}</InputError></div>

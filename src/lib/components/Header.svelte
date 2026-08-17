@@ -6,8 +6,18 @@
   export let description: string;
 </script>
 
+<!--
+  surface-2 → surface-3 rather than surface → surface-2: the old pair differed by
+  one value from white, so the band was invisible and content pulled up over it
+  (the offer cards on /leistungen) appeared to sit on plain white.
+-->
+<!--
+  pb-32 (128px) clears the -100px pull that CMS pages use to float content over
+  the band; at pb-24 the offer cards on /leistungen cut into the description
+  text on phones.
+-->
 <header
-  class="relative overflow-clip bg-gradient-to-b from-surface to-surface-2 pb-24 pt-20 lg:pb-36 lg:pt-32"
+  class="relative overflow-clip bg-gradient-to-b from-surface-2 to-surface-3 pb-32 pt-20 lg:pb-36 lg:pt-32"
 >
   <HeroBackdrop />
 

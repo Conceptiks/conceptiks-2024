@@ -29,18 +29,22 @@
     <slot />
   </main>
 
-  <footer class="mt-32 border-t border-line bg-dark text-light">
+  <!--
+    Light footer: built on surface tokens rather than fixed white, so it stays
+    light in the light theme and follows the page into dark mode.
+  -->
+  <footer class="mt-32 border-t border-line bg-surface-2">
     <Container>
       <div class="grid grid-cols-1 gap-12 pt-20 sm:grid-cols-2 md:grid-cols-4">
         <div class="md:col-span-2">
-          <Wordmark asLink="{false}" class="text-white" />
-          <address class="mt-5 space-y-1 not-italic text-white/60">
-            <p class="!text-white/60">Am Heidenhübel 6</p>
-            <p class="!text-white/60">66424 Homburg</p>
+          <Wordmark asLink="{false}" />
+          <address class="mt-5 space-y-1 not-italic">
+            <p>Am Heidenhübel 6</p>
+            <p>66424 Homburg</p>
           </address>
           <a
             href="mailto:hallo@maximtan.de"
-            class="underline-grow mt-5 inline-block text-white transition-colors hover:text-primary-300"
+            class="underline-grow mt-5 inline-block font-medium text-ink transition-colors hover:text-primary"
           >
             hallo@maximtan.de
           </a>
@@ -55,7 +59,7 @@
               <li>
                 <a
                   {href}
-                  class="text-white/70 transition-colors hover:text-white"
+                  class="text-ink-muted transition-colors hover:text-ink"
                 >
                   {label}
                 </a>
@@ -73,7 +77,7 @@
               <li>
                 <a
                   {href}
-                  class="text-white/70 transition-colors hover:text-white"
+                  class="text-ink-muted transition-colors hover:text-ink"
                 >
                   {label}
                 </a>
@@ -83,17 +87,17 @@
         </nav>
       </div>
 
-      <hr class="mt-16 border-white/10" />
+      <hr class="mt-16 border-line" />
 
       <div
         class="flex flex-col gap-4 py-8 text-sm sm:flex-row sm:items-center sm:justify-between"
       >
-        <p class="!text-white/50">© {year} Maxim Tan</p>
+        <p class="!text-ink-subtle">© {year} Maxim Tan</p>
         <ul class="flex flex-wrap gap-x-6 gap-y-2">
           <li>
             <a
               href="/impressum"
-              class="text-white/50 transition-colors hover:text-white"
+              class="text-ink-subtle transition-colors hover:text-ink"
             >
               Impressum
             </a>
@@ -101,7 +105,7 @@
           <li>
             <a
               href="/datenschutz"
-              class="text-white/50 transition-colors hover:text-white"
+              class="text-ink-subtle transition-colors hover:text-ink"
             >
               Datenschutz
             </a>

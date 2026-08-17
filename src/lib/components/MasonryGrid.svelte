@@ -108,36 +108,41 @@
 </script>
 
 <Container>
-  <!-- Segmented control: one track, the active segment lifts out of it. -->
-  <fieldset class="segmented mb-8">
-    <legend class="sr-only">Projekte nach Disziplin filtern</legend>
+  <!--
+    The track scrolls to the screen edges on phones rather than being boxed in
+    by the container padding — the negative margin cancels Container's px-8.
+  -->
+  <div class="scroller -mx-8 mb-8 px-8 sm:mx-0 sm:px-0">
+    <fieldset class="segmented">
+      <legend class="sr-only">Projekte nach Disziplin filtern</legend>
 
-    <div class="seg">
-      <input
-        type="radio"
-        name="categories"
-        id="category-all"
-        value="{null}"
-        class="peer sr-only"
-        bind:group="{selectedCategory}"
-      />
-      <label for="category-all">Alle</label>
-    </div>
-
-    {#each categories as { slug, label }}
       <div class="seg">
         <input
           type="radio"
           name="categories"
-          id="category-{slug}"
-          value="{slug}"
+          id="category-all"
+          value="{null}"
           class="peer sr-only"
           bind:group="{selectedCategory}"
         />
-        <label for="category-{slug}">{label}</label>
+        <label for="category-all">Alle</label>
       </div>
-    {/each}
-  </fieldset>
+
+      {#each categories as { slug, label }}
+        <div class="seg">
+          <input
+            type="radio"
+            name="categories"
+            id="category-{slug}"
+            value="{slug}"
+            class="peer sr-only"
+            bind:group="{selectedCategory}"
+          />
+          <label for="category-{slug}">{label}</label>
+        </div>
+      {/each}
+    </fieldset>
+  </div>
 
   {#if !filteredItems.length}
     <div class="rounded-xl border border-line py-16 text-center">
@@ -204,13 +209,24 @@
 </Container>
 
 <style lang="postcss">
-  .segmented {
-    @apply inline-flex max-w-full gap-0.5 overflow-x-auto rounded-full bg-surface-3 p-1;
+  .scroller {
+    overflow-x: auto;
     scrollbar-width: none;
+    -ms-overflow-style: none;
   }
 
-  .segmented::-webkit-scrollbar {
+  .scroller::-webkit-scrollbar {
     display: none;
+  }
+
+  .segmented {
+    @apply inline-flex gap-0.5 rounded-full bg-surface-3 p-1;
+    /*
+     * A fieldset defaults to min-inline-size: min-content, which beats any
+     * max-width and was pushing the whole page sideways on phones. Reset it and
+     * let the wrapper do the scrolling.
+     */
+    min-inline-size: 0;
   }
 
   .seg label {

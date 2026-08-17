@@ -15,8 +15,13 @@
   export let backgroundColor: string = "#0E0004";
 </script>
 
+<!--
+  basis-64 + grow rather than w-full: with the row set to wrap, three cards fit
+  one line on desktop and drop to one per row on phones, instead of being
+  squeezed past the viewport edge.
+-->
 <div
-  class="flex h-full w-full grow flex-col justify-end rounded-2xl border border-white/10 p-8 text-white shadow-card transition-shadow duration-300 ease-out hover:shadow-card-hover sm:p-10"
+  class="flex h-full min-w-0 grow basis-64 flex-col justify-end rounded-2xl border border-white/10 p-8 text-white shadow-card transition-shadow duration-300 ease-out hover:shadow-card-hover sm:p-10"
   style="background-color:{backgroundColor}"
 >
   {#if img}
