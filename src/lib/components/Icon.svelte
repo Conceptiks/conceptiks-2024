@@ -4,55 +4,28 @@
   let className = "";
   export { className as class };
   export let iconClass: string;
-  export let color: string | undefined = "#000000";
+  /** Defaults to the inherited text colour so icons follow the active theme. */
+  export let color: string | undefined = "currentColor";
   export let customSize: string | undefined = undefined;
   export let size: "sm" | "md" | "lg" | "xl" = "md";
 
-  let fontSize = "1px";
+  const sizes = {
+    sm: "16px",
+    md: "24px",
+    lg: "30px",
+    xl: "36px",
+  };
 
-  $: switch (size) {
-    case "sm":
-      fontSize = "16px";
-      break;
-    case "md":
-      fontSize = "24px";
-      break;
-    case "lg":
-      fontSize = "30px";
-      break;
-    case "xl":
-      fontSize = "36px";
-      break;
-  }
-
-  $: if (customSize) {
-    fontSize = customSize;
-  }
+  $: fontSize = customSize ?? sizes[size] ?? sizes.md;
 </script>
 
 <span
-  class="{twMerge('flex items-center', className)}"
+  class="{twMerge('flex shrink-0 items-center', className)}"
   style="width: {fontSize}; height: {fontSize}"
 >
   <iconify-icon
     icon="{iconClass}"
-    style="color: {color}; font-size: {fontSize}; line-height: none;"
+    aria-hidden="true"
+    style="color: {color}; font-size: {fontSize}; line-height: 1;"
   ></iconify-icon>
 </span>
-
-<style lang="postcss">
-  .i {
-    &.sm {
-      @apply text-base;
-    }
-    &.md {
-      @apply text-2xl;
-    }
-    &.lg {
-      @apply text-3xl;
-    }
-    &.xl {
-      @apply text-4xl;
-    }
-  }
-</style>

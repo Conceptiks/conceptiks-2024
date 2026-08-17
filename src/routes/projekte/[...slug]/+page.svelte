@@ -29,7 +29,7 @@
 
 <svelte:head>
   {#if content && content.data}
-    <title>{content.data.title} | Projects | conceptiks</title>
+    <title>{content.data.title} | Projekte | Maxim Tan</title>
     <meta name="description" content="{content.data.description}" />
   {/if}
 </svelte:head>
@@ -46,7 +46,6 @@
     brandColor="{content.data.brandColor}"
     projectUrl="{content.data.projectUrl}"
   />
-  <main>
     <Content
       canTrack="{false}"
       model="portfolio-item"
@@ -54,7 +53,6 @@
       {content}
       apiKey="{PUBLIC_BUILDER_API_KEY}"
     />
-  </main>
 {:else}
   Content Not Found
 {/if}

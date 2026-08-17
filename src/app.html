@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="%sveltekit.assets%/favicon.png" />
@@ -7,61 +7,34 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="manifest" href="/site.webmanifest" />
-    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
-    <meta name="msapplication-TileColor" content="#ffffff" />
-    <meta name="theme-color" content="#ffffff" />
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#EB4511" />
+    <meta name="msapplication-TileColor" content="#EB4511" />
+    <meta
+      name="theme-color"
+      media="(prefers-color-scheme: light)"
+      content="#ffffff"
+    />
+    <meta
+      name="theme-color"
+      media="(prefers-color-scheme: dark)"
+      content="#0c0b0b"
+    />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <script
-      src="https://cloud.ccm19.de/app.js?apiKey=08052f2b61fdc9c8e66efa3234271c7556bef71800cf9110&amp;domain=665c4d7c9ea34f70510eefd2"
-      referrerpolicy="origin"
-    ></script>
-
-    <!-- GOOGLE ANALYTICS TRACKING START -->
-
+    <!--
+      Applies the stored theme before first paint so a dark-mode visitor never
+      sees a white flash. Defaults to light: some CMS sections still carry
+      hard-coded light backgrounds, so dark is opt-in rather than system-driven.
+    -->
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-
-      gtag("consent", "default", {
-        ad_storage: "denied",
-        ad_user_data: "denied",
-        ad_personalization: "denied",
-        analytics_storage: "denied",
-        wait_for_update: 1000,
-      });
+      (function () {
+        try {
+          if (localStorage.getItem("theme") === "dark") {
+            document.documentElement.classList.add("dark");
+          }
+        } catch (e) {}
+      })();
     </script>
-    <script
-      async
-      src="https://ctm.conceptiks.com/gtag/js?id=G-8PF350N8FC"
-    ></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
-      gtag("set", "url_passthrough", true);
-      gtag("config", "G-8PF350N8FC", {
-        server_container_url: "https://ctm.conceptiks.com",
-      });
-    </script>
-    <!-- GOOGLE ANALYTICS TRACKING END -->
-
-    <!-- HOTJAR START -->
-    <script type="text/x-ccm-loader" data-ccm-loader-group="Hotjar">
-        (function(h,o,t,j,a,r){
-          h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
-          h._hjSettings={hjid:5011941,hjsv:6};
-          a=o.getElementsByTagName('head')[0];
-          r=o.createElement('script');r.async=1;
-          r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
-          a.appendChild(r);
-      })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
-    </script>
-    <!-- HOTJAR END -->
 
     %sveltekit.head%
   </head>

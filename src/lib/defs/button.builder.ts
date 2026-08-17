@@ -14,12 +14,13 @@ export const ButtonDef: RegisteredComponent = {
     {
       name: "style",
       type: "string",
-      enum: ["primary", "black"],
+      enum: ["primary", "black", "outline", "ghost"],
+      defaultValue: "primary",
     },
     {
       name: "size",
       type: "string",
-      enum: ["sm", "md"],
+      enum: ["sm", "md", "lg"],
       defaultValue: "md",
     },
   ],

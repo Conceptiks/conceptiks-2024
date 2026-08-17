@@ -3,75 +3,154 @@
 @tailwind components;
 @tailwind utilities;
 
-html,
-body {
-  @apply bg-white;
-  font-family: "Source Sans 3", sans-serif;
-}
+@layer base {
+  /*
+   * Semantic tokens as RGB channel triplets so Tailwind opacity modifiers work.
+   * Neutrals are warm-tinted to sit well next to the orange brand colour.
+   */
+  :root {
+    --surface: 255 255 255;
+    --surface-2: 250 250 249;
+    --surface-3: 245 245 244;
 
-h1 {
-  @apply font-semibold text-4xl sm:text-5xl md:text-5xl xl:text-7xl;
-}
+    --ink: 14 0 4;
+    --ink-muted: 87 83 78;
+    --ink-subtle: 120 113 108;
 
-h2 {
-  @apply text-xl sm:text-3xl mb-2 font-semibold;
-}
+    --line: 231 229 228;
+    --line-strong: 214 211 209;
 
-h3 {
-  @apply text-lg sm:text-2xl font-bold;
-}
-
-h4 {
-  @apply text-lg sm:text-2xl;
-}
-
-h5 {
-  @apply uppercase font-semibold text-lg sm:text-xl;
-}
-
-h6 {
-  @apply text-base sm:text-lg;
-}
-
-p {
-  @apply text-neutral-600 !leading-relaxed;
-}
-
-span.highlight {
-  @apply bg-gradient-to-br  from-purple-500 to-primary bg-clip-text text-transparent;
-}
-
-@keyframes underline-grow {
-  0% {
-    width: 0;
+    color-scheme: light;
   }
-  100% {
-    width: 100%;
+
+  .dark {
+    --surface: 12 11 11;
+    --surface-2: 23 21 20;
+    --surface-3: 33 30 29;
+
+    --ink: 250 250 249;
+    --ink-muted: 168 162 158;
+    --ink-subtle: 138 132 128;
+
+    --line: 41 37 36;
+    --line-strong: 68 64 60;
+
+    color-scheme: dark;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
+    /* Keep anchor targets clear of the sticky navigation. */
+    scroll-padding-top: 6rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    @apply bg-surface text-ink;
+    font-family: "Source Sans 3", sans-serif;
+    font-feature-settings: "kern", "liga", "calt";
+  }
+
+  /*
+   * Fluid display scale. clamp() removes the breakpoint jumps the old
+   * sm:/md:/xl: chains produced and keeps line lengths sane in between.
+   */
+  h1 {
+    @apply font-semibold tracking-tightest text-balance;
+    font-size: clamp(2.5rem, 1.6rem + 4.2vw, 4.5rem);
+    line-height: 1.04;
+  }
+
+  h2 {
+    @apply font-semibold tracking-tight text-balance;
+    font-size: clamp(1.75rem, 1.35rem + 1.8vw, 2.75rem);
+    line-height: 1.15;
+  }
+
+  h3 {
+    @apply font-semibold tracking-tight text-balance;
+    font-size: clamp(1.25rem, 1.1rem + 0.75vw, 1.75rem);
+    line-height: 1.25;
+  }
+
+  h4 {
+    @apply font-medium tracking-tight;
+    font-size: clamp(1.125rem, 1.05rem + 0.35vw, 1.375rem);
+    line-height: 1.35;
+  }
+
+  /* Eyebrow / strapline. */
+  h5 {
+    @apply uppercase font-semibold text-sm;
+    letter-spacing: 0.08em;
+  }
+
+  h6 {
+    @apply font-medium text-base sm:text-lg;
+    line-height: 1.45;
+  }
+
+  p {
+    @apply text-ink-muted leading-relaxed text-pretty;
+  }
+
+  hr {
+    @apply border-line;
+  }
+
+  ::selection {
+    @apply bg-primary text-white;
+  }
+
+  /* One consistent, visible focus treatment across the whole site. */
+  :where(a, button, input, textarea, select, summary, [tabindex]):focus-visible {
+    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-surface rounded-sm;
   }
 }
 
-/* Apply animation to the underline */
-.underline-grow {
-  .white {
-    background-color: white;
+@layer components {
+  .highlight {
+    @apply bg-gradient-to-br from-primary-400 via-primary-500 to-secondary bg-clip-text text-transparent;
   }
-  .black {
-    background-color: black;
+
+  /* Wordmark used in the navigation and footer. */
+  .wordmark {
+    @apply font-semibold tracking-tightest text-ink;
+    font-size: 1.25rem;
   }
-  .primary {
-    @apply bg-blue-500;
+}
+
+@layer utilities {
+  /* Links that grow an underline from the left on hover. */
+  .underline-grow {
+    position: relative;
   }
-  &::after {
+
+  .underline-grow::after {
     content: "";
     display: block;
     width: 0;
-    background-color: white;
-    height: 1px; /* You can adjust the thickness of the underline */
-    transition: width 0.3s ease; /* Smooth transition for width change */
+    height: 1px;
+    background-color: currentColor;
+    transition: width 0.3s cubic-bezier(0.22, 1, 0.36, 1);
   }
-}
 
-/* Trigger animation on hover */
-.underline-grow:hover::after {
-  width: 100%;
+  .underline-grow:hover::after,
+  .underline-grow:focus-visible::after {
+    width: 100%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .underline-grow::after {
+      transition: none;
+    }
+  }
 }

@@ -1,5 +1,5 @@
 // Unsere Partner
-// Experten, mit denen wir gerne zusammenarbeiten
+// Experten, mit denen ich gerne zusammenarbeite
 import type { RegisteredComponent } from "@builder.io/sdk-svelte";
 import Partners from "$lib/components/Partners.svelte";
 
@@ -15,13 +15,13 @@ export const PartnersDef: RegisteredComponent = {
     {
       name: "title",
       type: "string",
-      defaultValue: "Experten, mit denen wir gerne zusammenarbeiten",
+      defaultValue: "Experten, mit denen ich gerne zusammenarbeite",
     },
     {
       name: "description",
       type: "longText",
       defaultValue:
-        "An dieser Stelle möchten wir ehrlich sein: Wir umgeben uns gerne mit Menschen und Unternehmen, die mehr können, als wir. Denn wir sind uns sicher, dass wir nur so gemeinsam Großes erreichen können. Hier findest du eine Auswahl an Experten, mit denen wir jederzeit gerne zusammenarbeiten.",
+        "An dieser Stelle möchte ich ehrlich sein: Ich umgebe mich gerne mit Menschen und Unternehmen, die mehr können als ich. Denn nur so lässt sich gemeinsam Großes erreichen. Hier findest du eine Auswahl an Experten, mit denen ich jederzeit gerne zusammenarbeite.",
     },
     {
       name: "logos",

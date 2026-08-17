@@ -1,9 +1,9 @@
 <script lang="ts">
   import { Image } from "@unpic/svelte";
 
-  export let strapline,
-    title,
-    description = "";
+  export let strapline: string = "";
+  export let title: string = "";
+  export let description: string = "";
 
   export let logos: {
     src: string;
@@ -13,34 +13,39 @@
   }[] = [];
 </script>
 
-<div class="grid grid-cols-1 md:grid-cols-2 items-center gap-x-24 gap-y-8">
-  <div class="">
-    <h4 class="text-primary">{strapline}</h4>
-    <h2 class="text-black mt-2">
+<div class="grid grid-cols-1 items-center gap-x-20 gap-y-10 md:grid-cols-2">
+  <div>
+    {#if strapline}
+      <h5 class="text-primary">{strapline}</h5>
+    {/if}
+    <h2 class="mt-3 text-ink">
       {title}
     </h2>
-    <p>
-      {description}
-    </p>
+    {#if description}
+      <p class="mt-4 text-lg">
+        {description}
+      </p>
+    {/if}
   </div>
 
-  <div class="grid grid-cols-2 gap-1 items-start">
+  <div class="grid grid-cols-2 items-start gap-3">
     {#each logos as { src, alt, href, description }}
       <a
         {href}
         target="_blank"
-        class="relative px-12 py-12 bg-neutral-100 rounded-md"
+        rel="noreferrer"
+        class="group relative rounded-xl border border-line bg-surface-2 px-10 py-12 transition-colors duration-300 hover:border-line-strong"
       >
         {#if description}
-          <div
-            class="inline py-1 px-2 leading-none rounded-full bg-white border absolute left-2 bottom-2 text-xs"
+          <span
+            class="absolute bottom-2 left-2 inline rounded-full border border-line bg-surface px-2 py-1 text-xs leading-none text-ink-muted"
           >
             {description}
-          </div>
+          </span>
         {/if}
         <Image
           {src}
-          class="scale-100 hover:scale-105 object-center transition-all"
+          class="object-center transition-transform duration-300 ease-out group-hover:scale-105"
           layout="fullWidth"
           height="{60}"
           objectFit="contain"

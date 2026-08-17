@@ -1,118 +1,132 @@
-<script>
-  import { Image } from "@unpic/svelte";
+<script lang="ts">
   import Container from "./Container.svelte";
   import Button from "./Button.svelte";
+  import Wordmark from "./Wordmark.svelte";
+  import ThemeToggle from "./ThemeToggle.svelte";
   import { twMerge } from "tailwind-merge";
   import { afterNavigate } from "$app/navigation";
   import { page } from "$app/stores";
 
+  const links = [
+    { href: "/", label: "Home" },
+    { href: "/projekte", label: "Projekte" },
+    { href: "/ueber", label: "Über" },
+    { href: "/leistungen", label: "Leistungen" },
+  ];
+
   let scrollY = 0;
   let open = false;
 
-  $: navBarFixed = scrollY > 40;
+  $: scrolled = scrollY > 24;
+  $: currentPath = $page.url.pathname;
+
+  const isActive = (href: string, path: string) =>
+    href === "/" ? path === "/" : path.startsWith(href);
 
   afterNavigate(() => {
     open = false;
   });
 </script>
 
-<svelte:window bind:scrollY />
+<svelte:window
+  bind:scrollY
+  on:keydown="{(e) => {
+    if (e.key === 'Escape') open = false;
+  }}"
+/>
 
 <nav
+  aria-label="Hauptnavigation"
   class="{twMerge(
-    ' w-full z-50 backdrop-blur-xl filter transition-colors',
-    navBarFixed
-      ? '!top-0 fixed border-b bg-white md:bg-white/50 shadow-sm'
-      : '!top-0 md:top-10 absolute bg-white'
+    'fixed top-0 left-0 z-50 w-full transition-[background-color,border-color,box-shadow] duration-300 ease-out',
+    'border-b',
+    scrolled || open
+      ? 'border-line bg-surface/80 backdrop-blur-xl supports-[backdrop-filter]:bg-surface/70'
+      : 'border-transparent bg-surface'
   )}"
 >
   <Container>
-    <div class="py-6 gap-y-4 flex gap-x-8 items-center justify-between">
-      <a href="/" class="shrink-0 grow">
-        <Image
-          src="https://cdn.builder.io/api/v1/image/assets%2Fdb2c9de6bdf44847913d425128998cb3%2Fc7e46329e7ab47958cb5ad0508146ad0"
-          layout="fixed"
-          alt="logo"
-          height="{30}"
-        />
-      </a>
-      <ul class="justify-end md:gap-6 items-center hidden md:flex">
-        <li class="{twMerge($page.url.pathname === '/' ? 'font-bold' : '')}">
-          <a href="/">Home</a>
-        </li>
-        <li
-          class="{twMerge(
-            $page.url.pathname === '/projekte' ? 'font-bold' : ''
-          )}"
-        >
-          <a href="/projekte">Projekte</a>
-        </li>
-        <li
-          class="{twMerge($page.url.pathname === '/ueber' ? 'font-bold' : '')}"
-        >
-          <a href="/ueber">Über</a>
-        </li>
-        <li
-          class="{twMerge(
-            $page.url.pathname === '/leistungen' ? 'font-bold' : ''
-          )}"
-        >
-          <a href="/leistungen">Leistungen</a>
-        </li>
+    <div class="flex h-[72px] items-center justify-between gap-x-8">
+      <Wordmark class="shrink-0" />
+
+      <ul class="hidden items-center gap-x-1 md:flex">
+        {#each links as { href, label }}
+          {@const active = isActive(href, currentPath)}
+          <li>
+            <a
+              {href}
+              aria-current="{active ? 'page' : undefined}"
+              class="{twMerge(
+                'relative rounded-md px-3 py-2 text-[0.95rem] transition-colors duration-200',
+                'after:absolute after:bottom-1 after:left-3 after:right-3 after:h-px after:origin-left after:scale-x-0 after:bg-primary after:transition-transform after:duration-300 after:ease-out',
+                'hover:after:scale-x-100',
+                active
+                  ? 'font-semibold text-ink after:scale-x-100'
+                  : 'text-ink-muted hover:text-ink'
+              )}"
+            >
+              {label}
+            </a>
+          </li>
+        {/each}
       </ul>
-      <div class="inline-flex justify-end gap-x-2">
-        <Button href="/kontakt" size="sm">Kontakt</Button>
+
+      <div class="flex items-center justify-end gap-x-2">
+        <ThemeToggle />
+        <Button href="/kontakt" size="sm" class="hidden sm:inline-flex">
+          Kontakt
+        </Button>
         <button
-          class="md:hidden bg-neutral-200 border text-black w-10 h-10 flex items-center justify-center rounded-md"
+          type="button"
+          aria-label="{open ? 'Menü schließen' : 'Menü öffnen'}"
+          aria-expanded="{open}"
+          aria-controls="mobile-menu"
+          class="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-line text-ink transition-colors hover:bg-surface-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface md:hidden"
           on:click="{() => (open = !open)}"
         >
           <svg
-            class="w-6 h-6"
+            class="h-5 w-5"
             fill="none"
             stroke="currentColor"
+            stroke-width="1.75"
+            stroke-linecap="round"
             viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
           >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M4 6h16M4 12h16m-7 6h7"
-            ></path>
+            {#if open}
+              <path d="M6 6l12 12M18 6L6 18"></path>
+            {:else}
+              <path d="M4 7h16M4 12h16M4 17h16"></path>
+            {/if}
           </svg>
         </button>
       </div>
     </div>
   </Container>
+
   {#if open}
-    <div
-      class="md:hidden bg-white border-t t z-50 relative top-0 left-0 w-full h-full py-8"
-    >
+    <div id="mobile-menu" class="border-t border-line bg-surface md:hidden">
       <Container>
-        <ul class="justify-end gap-6 md:items-center flex flex-col">
-          <li class="{twMerge($page.url.pathname === '/' ? 'font-bold' : '')}">
-            <a href="/">Home</a>
-          </li>
-          <li
-            class="{twMerge(
-              $page.url.pathname === '/projekte' ? 'font-bold' : ''
-            )}"
-          >
-            <a href="/projekte">Projekte</a>
-          </li>
-          <li
-            class="{twMerge(
-              $page.url.pathname === '/ueber' ? 'font-bold' : ''
-            )}"
-          >
-            <a href="/ueber">Über</a>
-          </li>
-          <li
-            class="{twMerge(
-              $page.url.pathname === '/leistungen' ? 'font-bold' : ''
-            )}"
-          >
-            <a href="/leistungen">Leistungen</a>
+        <ul class="flex flex-col py-4">
+          {#each links as { href, label }}
+            {@const active = isActive(href, currentPath)}
+            <li>
+              <a
+                {href}
+                aria-current="{active ? 'page' : undefined}"
+                class="{twMerge(
+                  'block rounded-md px-2 py-3 text-lg transition-colors',
+                  active
+                    ? 'font-semibold text-ink'
+                    : 'text-ink-muted hover:text-ink'
+                )}"
+              >
+                {label}
+              </a>
+            </li>
+          {/each}
+          <li class="mt-2 sm:hidden">
+            <Button href="/kontakt" class="w-full">Kontakt</Button>
           </li>
         </ul>
       </Container>
@@ -120,17 +134,16 @@
   {/if}
 </nav>
 
+<!-- Backdrop: a plain button keeps the dismiss target keyboard-reachable. -->
 {#if open}
-  <div
-    on:click="{() => (open = !open)}"
-    class="fixed bg-black/20 inset-0 top-[82px] w-full h-full z-10"
-  ></div>
+  <button
+    type="button"
+    tabindex="-1"
+    aria-hidden="true"
+    on:click="{() => (open = false)}"
+    class="fixed inset-0 z-40 h-full w-full cursor-default bg-ink/20 backdrop-blur-[2px] md:hidden"
+  ></button>
 {/if}
 
-<style lang="postcss">
-  li {
-    a {
-      @apply px-2 py-1  rounded-md hover:underline;
-    }
-  }
-</style>
+<!-- Reserves the space the fixed navigation occupies. -->
+<div class="h-[72px]" aria-hidden="true"></div>

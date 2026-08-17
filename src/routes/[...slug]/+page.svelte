@@ -65,17 +65,15 @@
   {/if}
 </svelte:head>
 
-<main>
   {#if canShowContent}
     <Content
       canTrack="{false}"
       model="page"
       {content}
       {customComponents}
-      data="{form}"
+      data="{form ?? undefined}"
       apiKey="{PUBLIC_BUILDER_API_KEY}"
     />
   {:else}
     Content Not Found
   {/if}
-</main>

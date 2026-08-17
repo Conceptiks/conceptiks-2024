@@ -1,37 +1,39 @@
-import sgMail from '@sendgrid/mail';
-import { PRIVATE_SENDGRID_API_KEY } from '$env/static/private';
-
-interface DynamicTemplateData {
-	[key: string]: string;
-}
+import sgMail from "@sendgrid/mail";
+import { PRIVATE_SENDGRID_API_KEY } from "$env/static/private";
 
 interface Options {
-	from?: {
-		email: string;
-		name: string;
-	};
-	to: string;
-	replyTo?: string;
-	asm?: {
-		group_id: number;
-	};
-	templateId: string;
-	variables: DynamicTemplateData;
+  from?: {
+    email: string;
+    name: string;
+  };
+  to: string;
+  replyTo?: string;
+  subject: string;
+  text: string;
+  html?: string;
 }
 
-export const sendMail = async (data: Options) => {
-	sgMail.setApiKey(PRIVATE_SENDGRID_API_KEY);
-	const msg = {
-		from: {
-			email: data.from?.email || 'kontakt@conceptiks.com',
-			name: data.from?.name || 'Conceptiks Website'
-		},
-		to: data.to,
-		replyTo: data.replyTo,
-		templateId: data.templateId,
-		dynamicTemplateData: data.variables
-	};
-	const res = await sgMail.send(msg);
+export const sendMail = async ({
+  from,
+  to,
+  replyTo,
+  subject,
+  text,
+  html,
+}: Options) => {
+  sgMail.setApiKey(PRIVATE_SENDGRID_API_KEY);
 
-	return res;
+  const [response] = await sgMail.send({
+    from: {
+      email: from?.email || "hallo@maximtan.de",
+      name: from?.name || "maximtan.de",
+    },
+    to,
+    replyTo,
+    subject,
+    text,
+    html: html ?? text.replace(/\n/g, "<br />"),
+  });
+
+  return response;
 };
