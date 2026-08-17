@@ -3,11 +3,11 @@
 
   export let src: string;
   export let alt: string;
-  export let caption: string;
+  export let caption: string = "";
 </script>
 
-<figure class="">
-  <div class="border overflow-clip rounded-2xl">
+<figure>
+  <div class="overflow-clip rounded-2xl border border-line bg-surface-2">
     <Image
       layout="fullWidth"
       objectFit="contain"
@@ -17,7 +17,7 @@
     />
   </div>
   {#if caption}
-    <figcaption class="italic text-neutral-500 my-4">
+    <figcaption class="mt-4 text-sm text-ink-subtle">
       {caption}
     </figcaption>
   {/if}

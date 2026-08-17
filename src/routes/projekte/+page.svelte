@@ -39,7 +39,6 @@
   {/if}
 </svelte:head>
 
-<main>
   {#if canShowContent}
     <Content
       canTrack="{false}"
@@ -51,4 +50,3 @@
   {:else}
     Content Not Found
   {/if}
-</main>

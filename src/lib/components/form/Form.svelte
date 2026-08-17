@@ -1,349 +1,304 @@
 <script lang="ts">
-  import { twMerge } from "tailwind-merge";
-  import StepHeader from "./StepHeader.svelte";
   import Icon from "../Icon.svelte";
-  import { crossfade } from "svelte/transition";
-  import { cubicInOut } from "svelte/easing";
-  import { flip } from "svelte/animate";
-  import Step0 from "./Step0.svelte";
-  import Step1 from "./Step1.svelte";
-  import Step2 from "./Step2.svelte";
+  import InputError from "./InputError.svelte";
   import { enhance } from "$app/forms";
   import { onDestroy, onMount } from "svelte";
   import { browser } from "$app/environment";
   import { PUBLIC_TURNSTILE_SITE_KEY } from "$env/static/public";
 
-  let formData = [
-    {
-      title: "Projekt anfragen",
-      description: "Welche Herausforderung willst du meistern?",
-      props: {
-        challenge: {
-          value: "",
-          error: undefined,
-        },
-      },
-      valid: false,
-      component: Step0,
-    },
-    {
-      title: "Schritt 2/3",
-      description: "Beschreibe deine Herausforderung im Detail",
-      props: {
-        details: {
-          value: "",
-          error: undefined,
-        },
-        idea: {
-          value: "",
-          error: undefined,
-        },
-      },
-      valid: false,
-      component: Step1,
-    },
-    {
-      title: "Schritt 3/3",
-      description: "Kontaktaufnahme",
-      props: {
-        name: {
-          value: "",
-          error: undefined,
-        },
-        email: {
-          value: "",
-          error: undefined,
-        },
-        phone: {
-          value: "",
-          error: undefined,
-        },
-        companyName: {
-          value: "",
-          error: undefined,
-        },
-        privacy: {
-          value: false,
-          error: undefined,
-        },
-        captchaToken: {
-          value: null,
-          error: undefined,
-        },
-      },
-      valid: false,
-      component: Step2,
-    },
-  ];
+  type FieldName =
+    | "name"
+    | "email"
+    | "companyName"
+    | "phone"
+    | "message"
+    | "privacy"
+    | "captchaToken";
 
-  const [send, receive] = crossfade({
-    duration: 300,
-    easing: cubicInOut,
-  });
-
-  let currentStep = 0;
-
-  const nextStep = () => {
-    currentStep++;
+  let values = {
+    name: "",
+    email: "",
+    companyName: "",
+    phone: "",
+    message: "",
+    privacy: false,
   };
 
-  const previousStep = () => {
-    currentStep--;
-  };
-
-  let finished = false;
+  let captchaToken: string | null = null;
+  let errors: Partial<Record<FieldName, string>> = {};
+  let formError: string | null = null;
   let loading = false;
-  let fatalError = false;
+  let finished = false;
 
-  const handleError = ({ data, status }) => {
+  $: valid =
+    values.name.trim() &&
+    values.email.trim() &&
+    values.message.trim() &&
+    values.privacy;
+
+  const handleFailure = (data: any, status: number) => {
+    // The captcha token is single-use — a rejected submission needs a fresh one.
     if (status === 406 || status === 500) {
-      console.error("Captcha failed, resetting");
-      formData[2].props.captchaToken.value = null;
+      captchaToken = null;
       if (browser && window.turnstile) {
         window.turnstile.reset("#captchaWidget");
       }
     }
 
-    if (!data.errors) {
-      fatalError = true;
+    if (!data?.errors?.length) {
+      formError =
+        "Deine Nachricht konnte nicht gesendet werden. Bitte versuch es noch einmal.";
       return;
     }
 
-    const errors: {
-      expected: any;
-      path: string[];
-      message: string;
-    }[] = data.errors;
+    const issues: { path: string[]; message: string }[] = data.errors;
 
-    errors.forEach((error) => {
-      const path = error.path[0];
-      const message = error.message;
+    // Delivery failures come back under a "form" path — those belong at the top
+    // of the form rather than next to a field.
+    formError =
+      issues.find((issue) => issue.path[0] === "form")?.message ?? null;
 
-      formData.forEach(({ props }) => {
-        console.log(props);
-        if (props[path]) {
-          props[path].error = message;
-        }
-      });
-
-      formData = formData;
-    });
-
-    formData.forEach((step, i) => {
-      for (const prop in step.props) {
-        if (step.props[prop].error) {
-          currentStep = i;
-          break;
-        }
-      }
-    });
+    errors = Object.fromEntries(
+      issues
+        .filter((issue) => issue.path[0] !== "form")
+        .map((issue) => [issue.path[0], issue.message])
+    );
   };
 
-  onDestroy(() => {
-    // destroy turnstile
-    if (browser && window.turnstile) {
-      window.turnstile.remove();
-    }
-  });
-
   onMount(() => {
-    // try to check if window.turnstile is present and if so, run the code below. otherwise, retry every 100ms for 5s.
+    // The Turnstile script loads async; poll briefly until its API is there.
     let tries = 0;
     const interval = setInterval(() => {
       if (window.turnstile) {
         clearInterval(interval);
         window.turnstile.render("#captchaWidget", {
           sitekey: PUBLIC_TURNSTILE_SITE_KEY,
-          callback: (token: string) => {
-            formData[2].props.captchaToken.value = token;
-          },
+          callback: (token: string) => (captchaToken = token),
         });
-      } else {
-        tries++;
-        if (tries >= 50) {
-          clearInterval(interval);
-        }
+      } else if (++tries >= 50) {
+        clearInterval(interval);
       }
     }, 100);
+
+    return () => clearInterval(interval);
   });
+
+  onDestroy(() => {
+    if (browser && window.turnstile) {
+      window.turnstile.remove();
+    }
+  });
+
+  const field =
+    "mt-2 w-full rounded-xl border border-line bg-surface px-4 py-3 text-ink placeholder:text-ink-subtle " +
+    "transition-colors duration-200 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20";
 </script>
 
 <svelte:head>
   <script
     src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
+    async
   ></script>
 </svelte:head>
 
-<form
-  action="/"
-  method="POST"
-  use:enhance="{({ formElement, formData, action, cancel, submitter }) => {
-    loading = true;
-
-    return async ({ result, update }) => {
-      loading = false;
-
-      if (!result.data) {
-        update({
-          invalidateAll: true,
-          reset: true,
-        });
-
-        if (window.gtag && browser) {
-          window.gtag('event', 'conversion', {
-            send_to: 'AW-11361528556/ahJxCKy8w-gYEOzVzKkq',
-          });
-
-          // creaete new generate_lead event in ga4
-          window.gtag('event', 'generate_lead', {
-            send_to: 'G-8PF350N8FC',
-          });
-        }
-
-        finished = true;
-      } else {
-        handleError(result);
-      }
-    };
-  }}"
-  class="relative border overflow-clip !max-h-[757px] rounded-lg drop-shadow-xl bg-white"
+<div
+  class="overflow-hidden rounded-2xl border border-line bg-surface shadow-panel"
 >
-  <div
-    class="{twMerge(
-      'p-8 text-center h-[728px] relative flex-col items-center justify-center',
-      fatalError ? 'flex' : 'hidden'
-    )}"
-  >
-    <Icon iconClass="carbon:warning" color="#EB4511" customSize="100px" />
-    <h2 class="text-2xl font-bold">
-      Bei der Übermittlung ist ein Fehler aufgetreten!
-    </h2>
-    <p
-      class="text-lg mt
-      -4"
-    >
-      Bitte probiere es erneut, die Formularfelder wurde nicht zurückgesetzt.
-    </p>
-    <button
-      type="button"
-      class="justify-center flex items-center gap-x-2"
-      on:click="{() => (fatalError = false)}"
-    >
-      Erneut versuchen <Icon iconClass="carbon:refresh" color="#ffffff" />
-    </button>
-  </div>
   {#if finished}
     <div
-      class="{twMerge(
-        'p-8 text-center h-[728px] relative flex-col items-center justify-center',
-        fatalError ? 'hidden' : 'flex'
-      )}"
+      class="flex flex-col items-center justify-center px-8 py-20 text-center"
     >
-      <Icon iconClass="carbon:email" color="#EB4511" customSize="100px" />
-      <h2 class="text-2xl font-bold">Vielen Dank für deine Anfrage!</h2>
-      <p
-        class="text-lg mt
-      -4"
-      >
-        Wir melden uns in Kürze bei dir.
-      </p>
+      <Icon iconClass="carbon:email" color="#EB4511" customSize="64px" />
+      <h2 class="mt-6 text-2xl font-semibold text-ink">
+        Vielen Dank für deine Nachricht!
+      </h2>
+      <p class="mt-3 text-lg">Ich melde mich in Kürze bei dir.</p>
     </div>
   {:else}
-    <div class="{twMerge(fatalError ? 'hidden' : 'block')}">
-      <StepHeader
-        title="{formData[currentStep].title}"
-        description="{formData[currentStep].description}"
-        numberOfSteps="{formData.length}"
-        {currentStep}
-        {previousStep}
-      />
+    <form
+      action="/"
+      method="POST"
+      use:enhance="{() => {
+        loading = true;
+        formError = null;
+        errors = {};
 
-      {#each formData as { component, valid }, i (i)}
-        <div
-          class="{twMerge(
-            'h-[600px] relative',
-            currentStep === i ? 'block ' : ' absolute opacity-0'
-          )}"
-          in:send="{{ key: i }}"
-          out:receive="{{ key: i }}"
-          animate:flip="{{ duration: 300 }}"
-        >
-          <div
-            class="fixed w-full bg-gradient-to-b from-white to-transparent h-12 z-10 pointer-events-none"
-          ></div>
-          <div
-            class="fixed bottom-0 w-full bg-gradient-to-t from-white to-transparent h-20 z-10"
-          ></div>
-          <div class="p-8 pb-28 overflow-y-auto h-full">
-            <svelte:component
-              this="{component}"
-              bind:props="{formData[i].props}"
-              bind:valid
-              context="{formData}"
-            />
-          </div>
-          <div class="w-full px-8 absolute bottom-8 z-20">
-            {#if formData.length > currentStep + 1}
-              <button
-                type="button"
-                class="justify-center flex items-center gap-x-2"
-                on:click="{nextStep}"
-                disabled="{!valid}"
-              >
-                Weiter <Icon
-                  iconClass="carbon:arrow-right"
-                  color="{twMerge(!valid ? 'rgb(82,82,82)' : '#ffffff')}"
-                />
-              </button>
-            {:else if !loading}
-              <button
-                type="submit"
-                class="justify-center flex items-center gap-x-2"
-                disabled="{!valid}"
-              >
-                Absenden <Icon
-                  iconClass="carbon:arrow-right"
-                  color="{twMerge(!valid ? 'rgb(82,82,82)' : '#ffffff')}"
-                />
-              </button>
-            {:else}
-              <button
-                type="button"
-                class="justify-center flex items-center gap-x-2"
-                disabled
-              >
-                Lädt...
-                <Icon iconClass="carbon:loading" color="#ffffff" />
-              </button>
-            {/if}
-          </div>
+        return async ({ result, update }) => {
+          loading = false;
+
+          if (result.type === 'success') {
+            finished = true;
+            await update({ reset: true });
+            return;
+          }
+
+          if (result.type === 'failure') {
+            handleFailure(result.data, result.status);
+            return;
+          }
+
+          await update();
+        };
+      }}"
+      class="grid grid-cols-1 gap-6 p-8 sm:grid-cols-2"
+    >
+      <div class="sm:col-span-2">
+        <h2 class="text-2xl font-semibold text-ink">Schreib mir</h2>
+        <p class="mt-1">
+          Erzähl mir kurz, worum es geht — ich melde mich zeitnah zurück.
+        </p>
+      </div>
+
+      {#if formError}
+        <div class="sm:col-span-2">
+          <InputError>{formError}</InputError>
         </div>
-      {/each}
-    </div>
+      {/if}
+
+      <label class="block">
+        <span class="flex justify-between font-semibold text-ink">
+          Name
+          <span class="text-sm font-normal text-ink-subtle">Pflichtangabe</span>
+        </span>
+        <input
+          name="name"
+          bind:value="{values.name}"
+          class="{field}"
+          placeholder="Max Mustermann"
+          autocomplete="name"
+          required
+        />
+        {#if errors.name}
+          <div class="mt-2"><InputError>{errors.name}</InputError></div>
+        {/if}
+      </label>
+
+      <label class="block">
+        <span class="flex justify-between font-semibold text-ink">
+          E-Mail
+          <span class="text-sm font-normal text-ink-subtle">Pflichtangabe</span>
+        </span>
+        <input
+          type="email"
+          name="email"
+          bind:value="{values.email}"
+          class="{field}"
+          placeholder="mail@adresse.de"
+          autocomplete="email"
+          required
+        />
+        {#if errors.email}
+          <div class="mt-2"><InputError>{errors.email}</InputError></div>
+        {/if}
+      </label>
+
+      <label class="block">
+        <span class="font-semibold text-ink">
+          Unternehmen
+          <span class="ml-1 text-sm font-normal text-ink-subtle">optional</span>
+        </span>
+        <input
+          name="companyName"
+          bind:value="{values.companyName}"
+          class="{field}"
+          placeholder="Musterfirma"
+          autocomplete="organization"
+        />
+      </label>
+
+      <label class="block">
+        <span class="font-semibold text-ink">
+          Telefon
+          <span class="ml-1 text-sm font-normal text-ink-subtle">optional</span>
+        </span>
+        <input
+          type="tel"
+          name="phone"
+          bind:value="{values.phone}"
+          class="{field}"
+          placeholder="+49 176 12345678"
+          autocomplete="tel"
+        />
+      </label>
+
+      <label class="block sm:col-span-2">
+        <span class="flex justify-between font-semibold text-ink">
+          Nachricht
+          <span class="text-sm font-normal text-ink-subtle">Pflichtangabe</span>
+        </span>
+        <textarea
+          name="message"
+          bind:value="{values.message}"
+          class="{field} h-40 resize-y"
+          placeholder="Worum geht es? Je konkreter, desto besser kann ich dir antworten."
+          required
+        ></textarea>
+        {#if errors.message}
+          <div class="mt-2"><InputError>{errors.message}</InputError></div>
+        {/if}
+      </label>
+
+      <div class="rounded-xl border border-line bg-surface-2 p-4 sm:col-span-2">
+        <label class="flex items-start gap-2">
+          <input
+            type="checkbox"
+            name="privacy"
+            bind:checked="{values.privacy}"
+            required
+            class="mt-1 rounded border-line-strong bg-surface text-primary focus:ring-primary/30"
+          />
+          <span class="text-ink-muted">
+            Ich habe die
+            <a
+              href="/datenschutz"
+              class="text-primary underline-offset-2 hover:underline"
+              target="_blank">Datenschutzerklärung</a
+            >
+            gelesen und erkläre mich mit der dort genannten Speicherung und Verarbeitung
+            meiner Daten einverstanden.
+          </span>
+        </label>
+        {#if errors.privacy}
+          <div class="mt-2"><InputError>{errors.privacy}</InputError></div>
+        {/if}
+      </div>
+
+      <div class="sm:col-span-2">
+        <div id="captchaWidget"></div>
+        <input type="hidden" name="captchaToken" value="{captchaToken ?? ''}" />
+        {#if errors.captchaToken}
+          <div class="mt-2"><InputError>{errors.captchaToken}</InputError></div>
+        {/if}
+      </div>
+
+      <div class="sm:col-span-2">
+        <button type="submit" disabled="{!valid || loading}">
+          {#if loading}
+            Wird gesendet…
+            <Icon
+              iconClass="carbon:circle-dash"
+              color="currentColor"
+              class="animate-spin"
+            />
+          {:else}
+            Nachricht senden
+            <Icon iconClass="carbon:arrow-right" color="currentColor" />
+          {/if}
+        </button>
+      </div>
+    </form>
   {/if}
-</form>
+</div>
 
 <style lang="postcss">
-  @keyframes send {
-    0% {
-      transform: translateX(-400px);
-    }
-    50% {
-      transform: translateX(0px);
-    }
-    100% {
-      transform: translateX(400px);
-    }
-  }
-
-  .send-animation {
-    animation: send 2s ease-in-out infinite;
-  }
-
   button {
-    @apply w-full px-8 py-4 font-bold drop-shadow-lg transition-all rounded-lg bg-primary hover:bg-secondary text-white hover:border-black/50;
+    @apply flex w-full items-center justify-center gap-x-2;
+    @apply rounded-xl bg-primary px-8 py-4 font-semibold text-white;
+    @apply transition-colors duration-200 ease-out hover:bg-primary-600 active:bg-primary-700;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface;
+
     &:disabled {
-      @apply bg-neutral-300 text-neutral-600 cursor-not-allowed;
+      @apply cursor-not-allowed bg-surface-3 text-ink-subtle;
     }
   }
 </style>

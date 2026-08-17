@@ -14,7 +14,7 @@ export const CTADef: RegisteredComponent = {
       name: "description",
       type: "string",
       defaultValue:
-        "Wir haben dein Interesse geweckt und du würdest uns gerne besser kennenlernen?",
+        "Ich habe dein Interesse geweckt und du würdest mich gerne besser kennenlernen?",
     },
   ],
   canHaveChildren: true,

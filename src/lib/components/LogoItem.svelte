@@ -11,28 +11,33 @@
     src: string;
   };
 
-  let as = "div";
-
-  $: if (href) {
-    as = "a";
-  }
+  $: as = href ? "a" : "div";
 </script>
 
 <svelte:element
   this="{as}"
   href="{href ?? undefined}"
   class="{twMerge(
-    'w-full  rounded flex flex-col gap-x-4 gap-y-2 items-center justify-center',
-    border ? 'border border-neutral-200 py-6 px-4 ' : ''
+    'flex w-full flex-col items-center justify-center gap-x-4 gap-y-2 rounded-xl',
+    border
+      ? 'border border-line bg-surface px-4 py-6 transition-colors duration-300 hover:border-line-strong'
+      : '',
+    href ? 'group' : ''
   )}"
 >
-  <div class="flex items-center h-12 w-1/2">
-    <Image {...img} layout="fullWidth" height="{48}" objectFit="contain" />
+  <div class="flex h-12 w-1/2 items-center">
+    <Image
+      {...img}
+      layout="fullWidth"
+      height="{48}"
+      objectFit="contain"
+      class="transition-transform duration-300 ease-out group-hover:scale-105"
+    />
   </div>
   {#if title}
-    <h6 class="font-bold mt-2">{title}</h6>
+    <h6 class="mt-2 font-semibold text-ink">{title}</h6>
     {#if description}
-      <p>{description}</p>
+      <p class="text-center text-sm">{description}</p>
     {/if}
   {/if}
 </svelte:element>

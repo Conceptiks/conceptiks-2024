@@ -7,4 +7,4 @@
   let className = "";
 </script>
 
-<hr class="{twMerge('border-neutral-200 w-full', className, verticalGap)}" />
+<hr class="{twMerge('w-full border-line', className, verticalGap)}" />

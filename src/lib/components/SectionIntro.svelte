@@ -21,26 +21,31 @@
   export let hyphenate = false;
   export let textStyle: "lighter" | "light" | "dark" = "dark";
   export let straplineStyle: "primary" = "primary";
-  // Check if description is HTML to prevent nested p-tags
 </script>
 
-<div class="mb-10">
+<div class="mb-12">
   <Container {...containerOptions} class="gap-x-8">
     <hgroup
       class="{twMerge(
-        center ? 'text-center mx-auto' : 'text-start',
+        center ? 'mx-auto text-center' : 'text-start',
         'w-full sm:w-auto sm:max-w-[66.6%] md:max-w-[50%] xl:max-w-[60%]',
         className
       )}"
     >
       {#if strapline}
-        <h4 class="{straplineStyle}">{strapline}</h4>
+        <h5
+          class="{twMerge(
+            straplineStyle === 'primary' ? 'text-primary' : 'text-ink-subtle'
+          )}"
+        >
+          {strapline}
+        </h5>
       {/if}
       {#if title}
         <h2
           class="{twMerge(
-            textStyle === 'dark' ? 'text-black' : 'text-white',
-            'mt-2'
+            textStyle === 'dark' ? 'text-ink' : 'text-white',
+            strapline ? 'mt-3' : ''
           )}"
         >
           {title}
@@ -52,27 +57,23 @@
     <Container {...containerOptions} class="flex-wrap">
       <div
         class="{twMerge(
-          center ? 'text-center sm:mx-auto' : 'text-start',
+          center ? 'sm:mx-auto text-center' : 'text-start',
           splitColumns ? 'sm:columns-2 !basis-full' : '',
           justifyText ? '!text-justify' : '',
           hyphenate ? '!hyphens-auto' : '',
           textStyle === 'light'
-            ? ' [&_p]:text-neutral-300'
+            ? '[&_p]:text-neutral-300'
             : textStyle === 'lighter'
               ? '[&_p]:text-white'
               : '',
-          'mt-6 columns-1 basis-full sm:basis-2/3 md:basis-1/2 xl:basis-3/5',
+          'mt-6 columns-1 basis-full text-lg sm:basis-2/3 md:basis-1/2 xl:basis-3/5',
           classDescription
         )}"
       >
-        {#if description}
-          {@html description}
-        {/if}
+        {@html description}
       </div>
       {#if additionalLogo && !center}
-        <hr
-          class="sm:hidden w-full border-neutral-200 mt-6 mb-3 sm:my-0 sm:mx-6"
-        />
+        <hr class="mt-6 mb-3 w-full sm:my-0 sm:mx-6 sm:hidden" />
         {#if additionalLogo.href}
           <a
             class="flex-1 place-self-center"
@@ -85,7 +86,7 @@
               alt="{additionalLogo.alt}"
               width="{160}"
               aspectRatio="{4 / 3}"
-              class="w-auto h-16 sm:h-24 mx-auto sm:!mr-0 sm:ml-auto !object-contain"
+              class="mx-auto h-16 w-auto !object-contain sm:ml-auto sm:!mr-0 sm:h-24"
             />
           </a>
         {:else}
@@ -95,11 +96,11 @@
               alt="{additionalLogo.alt}"
               width="{160}"
               aspectRatio="{4 / 3}"
-              class="w-auto h-16 sm:h-24 mx-auto sm:!mr-0 sm:ml-auto !object-contain"
+              class="mx-auto h-16 w-auto !object-contain sm:ml-auto sm:!mr-0 sm:h-24"
             />
           </div>
         {/if}
-        <hr class="sm:hidden w-full border-neutral-200 mt-3 sm:my-0 sm:mx-6" />
+        <hr class="mt-3 w-full sm:my-0 sm:mx-6 sm:hidden" />
       {/if}
     </Container>
   {/if}
@@ -108,7 +109,7 @@
       <div
         class="{twMerge(
           center
-            ? 'text-center basis-full sm:basis-2/3 md:basis-1/2 mx-auto'
+            ? 'mx-auto basis-full text-center sm:basis-2/3 md:basis-1/2'
             : 'w-full'
         )}"
       >
@@ -117,11 +118,3 @@
     </Container>
   {/if}
 </div>
-
-<style lang="postcss">
-  h4 {
-    &.primary {
-      @apply text-primary;
-    }
-  }
-</style>

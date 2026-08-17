@@ -1,4 +1,6 @@
 <script lang="ts" context="module">
+  export type ImageRatio = "16:9" | "3:2" | "4:3" | "1:1";
+
   export interface MasonryItem {
     aspectRatio:
       | "1/1"
@@ -18,6 +20,7 @@
         data: {
           thumbnail: string;
           title: string;
+          description?: string;
           url: string;
           category: string[];
         };
@@ -28,127 +31,207 @@
 
 <script lang="ts">
   import { Image } from "@unpic/svelte";
-  import { Masonry } from "svelte-bricks";
   import Container from "./Container.svelte";
+  import { flip } from "svelte/animate";
+  import { onMount } from "svelte";
+
   export let items: MasonryItem[] = [];
-  let [minColWidth, maxColWidth, gap] = [300, 800, 24];
-  let width: number, height: number;
+
+  /**
+   * One ratio for every thumbnail — the even crop is what makes the grid read as
+   * set rather than assembled. 3:2 matches the source images, so nothing is
+   * cropped. Falls back to each item's own `aspectRatio` when cleared in the
+   * editor.
+   */
+  export let imageRatio: ImageRatio | "" = "3:2";
+
   let selectedCategory: string | null = null;
 
-  // map items to new array with aspectRatio as a number
-  $: mappedItems = items.map((item) => ({
-    ...item,
-    id: item.reference.id,
-    aspectRatio: item.aspectRatio.split("/").reduce((a, b) => a / b),
+  // The CMS stores categories as slugs; these are how they should read.
+  const CATEGORY_LABELS: Record<string, string> = {
+    development: "Development",
+    "ui-design": "UI Design",
+    "ux-design": "UX Design",
+    branding: "Branding",
+    ausstellungsdesign: "Ausstellungsdesign",
+  };
+
+  const labelFor = (slug: string) =>
+    CATEGORY_LABELS[slug] ??
+    slug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+
+  /** Accepts "16:9" and "16/9" alike. */
+  const toRatio = (value: string, fallback = 4 / 3): number => {
+    const [w, h] = value.split(/[:/]/);
+    const ratio = Number(w) / Number(h);
+    return Number.isFinite(ratio) && ratio > 0 ? ratio : fallback;
+  };
+
+  // A reference pointing at an unpublished or deleted entry resolves to no
+  // value, so skip those instead of letting the grid throw reading `.data`.
+  $: mappedItems = items
+    .filter((item) => item?.reference?.value?.data?.thumbnail)
+    .map((item) => ({
+      ...item,
+      id: item.reference.id,
+      ratio: imageRatio
+        ? toRatio(imageRatio)
+        : toRatio(item.aspectRatio ?? "4/3"),
+    }));
+
+  $: categories = [
+    ...new Set(
+      mappedItems.flatMap((item) => item.reference.value.data.category ?? [])
+    ),
+  ].map((slug) => ({
+    slug,
+    label: labelFor(slug),
   }));
 
-  const createFilters = (
-    mappedItems: MasonryItem[],
-    selectedCategory: string | null
-  ) => {
-    if (!mappedItems) return [];
+  $: filteredItems = ((active: string | null) =>
+    active
+      ? mappedItems.filter((item) =>
+          item.reference.value.data.category?.includes(active)
+        )
+      : mappedItems)(selectedCategory);
 
-    return mappedItems.filter((item) => {
-      if (selectedCategory === null) {
-        return item;
-      } else {
-        return item.reference.value.data.category.includes(selectedCategory);
-      }
-    });
-  };
+  let reduceMotion = false;
 
-  const createCateogries = (items: MasonryItem[], itemsw) => {
-    if (!items) return [];
+  onMount(() => {
+    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => (reduceMotion = query.matches);
 
-    return items.reduce((acc, item) => {
-      item.reference.value.data.category.forEach((category) => {
-        if (!acc.includes(category)) {
-          acc.push(category);
-        }
-      });
-      return acc;
-    }, []);
-  };
-
-  $: categories = createCateogries(mappedItems, items);
-  $: filteredItems = createFilters(mappedItems, selectedCategory);
+    update();
+    query.addEventListener("change", update);
+    return () => query.removeEventListener("change", update);
+  });
 </script>
 
 <Container>
-  <fieldset class="flex flex-wrap gap-y-1 gap-x-2 lg:gap-3 mb-8 lg:mb-4">
-    <legend aria-label="Filter" class="sr-only hidden">Filter</legend>
-    <div class="">
+  <!-- Segmented control: one track, the active segment lifts out of it. -->
+  <fieldset class="segmented mb-8">
+    <legend class="sr-only">Projekte nach Disziplin filtern</legend>
+
+    <div class="seg">
       <input
         type="radio"
         name="categories"
-        id="all"
+        id="category-all"
         value="{null}"
-        class="peer hidden"
+        class="peer sr-only"
         bind:group="{selectedCategory}"
       />
-      <!-- label styling based on peer state -->
-      <label
-        for="all"
-        class="text-sm peer-checked:font-bold capitalize py-1 px-2 hover:cursor-pointer rounded-md bg-neutral-100 hover:bg-neutral-200 transition-all peer-checked:bg-gradient-to-br from-purple-500 to-primary peer-checked:text-white"
-        >Alle</label
-      >
+      <label for="category-all">Alle</label>
     </div>
-    <!-- {#if categories.length > 0} -->
-    {#each categories as category}
-      <!-- <span
-        class="last:hidden text-neutral-300"
-        aria-hidden="true"
-        role="presentation">/</span
-      > -->
-      <div class="">
+
+    {#each categories as { slug, label }}
+      <div class="seg">
         <input
           type="radio"
           name="categories"
-          id="{category}"
-          value="{category}"
-          class="peer hidden"
+          id="category-{slug}"
+          value="{slug}"
+          class="peer sr-only"
           bind:group="{selectedCategory}"
         />
-        <!-- label styling based on peer state -->
-        <label
-          for="{category}"
-          class="text-sm peer-checked:font-bold capitalize py-1 px-2 hover:cursor-pointer rounded-md bg-neutral-100 hover:bg-neutral-200 transition-all peer-checked:bg-gradient-to-br from-purple-500 to-primary peer-checked:text-white"
-          >{category}</label
-        >
+        <label for="category-{slug}">{label}</label>
       </div>
     {/each}
-    <!-- {/if} -->
   </fieldset>
-  {#if !filteredItems || filteredItems.length === 0}
-    <p>Loading...</p>
+
+  {#if !filteredItems.length}
+    <div class="rounded-xl border border-line py-16 text-center">
+      <p>Keine Projekte in dieser Disziplin.</p>
+    </div>
   {:else}
-    <div class="grid grid-cols-1 gap-2 sm:grid-cols-2 items-start">
-      {#each filteredItems as item}
-        <div class="">
-          <a
-            class="block relative overflow-clip group shadow-neutral-100 drop-shadow-xl rounded-lg peer"
-            href="{item.reference.value.data.url}"
+    <div class="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2">
+      {#each filteredItems as item, i (item.id)}
+        {@const project = item.reference.value.data}
+        <a
+          href="{project.url}"
+          animate:flip="{{ duration: reduceMotion ? 0 : 260 }}"
+          class="group block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-4 focus-visible:ring-offset-surface"
+        >
+          <!--
+            translateZ(0) forces its own compositing layer — without it Safari
+            lets the scaling image bleed past the rounded corners on hover.
+          -->
+          <div
+            class="overflow-hidden rounded-xl bg-surface-3 [transform:translateZ(0)]"
           >
-            <div class=" overflow-clip block w-full bg-white">
-              <Image
-                objectFit="cover"
-                layout="constrained"
-                width="{800}"
-                aspectRatio="{parseFloat(item.aspectRatio)}"
-                class="hover:scale-105 scale-100 transition-transform duration-300 ease-in-out"
-                src="{item.reference.value.data.thumbnail}"
-                alt="{item.reference.value.data.title} mockup"
-              />
-            </div>
-          </a>
-          <div class="mt-4 mb-8 peer-hover:[&>strong]:text-primary">
-            <strong class="text-xl transition-all"
-              >{item.reference.value.data.title}</strong
-            >
-            <p class="">{item.reference.value.data.description}</p>
+            <Image
+              objectFit="cover"
+              layout="constrained"
+              width="{800}"
+              aspectRatio="{item.ratio}"
+              class="saturate-[.92] motion-safe:transition-[transform,filter] motion-safe:duration-500 motion-safe:ease-out group-hover:saturate-100 motion-safe:group-hover:scale-[1.03]"
+              src="{project.thumbnail}"
+              alt="{project.title} mockup"
+            />
           </div>
-        </div>
+
+          <!-- Meta block: title left, running number right, marks below. -->
+          <div
+            class="mt-4 grid grid-cols-[1fr_auto] items-start gap-x-4 gap-y-1"
+          >
+            <h3
+              class="text-lg font-semibold tracking-tight text-ink transition-colors duration-200 group-hover:text-primary sm:text-xl"
+            >
+              {project.title}
+            </h3>
+            <span class="pt-1 font-mono text-xs tabular-nums text-ink-subtle">
+              {String(i + 1).padStart(2, "0")}
+            </span>
+
+            {#if project.category?.length}
+              <div class="col-span-2 mt-1 flex flex-wrap gap-1.5">
+                {#each project.category as category}
+                  <span class="mark">{labelFor(category)}</span>
+                {/each}
+              </div>
+            {/if}
+
+            {#if project.description}
+              <p class="col-span-2 mt-2 text-[0.95rem] leading-relaxed">
+                {project.description}
+              </p>
+            {/if}
+          </div>
+        </a>
       {/each}
     </div>
   {/if}
 </Container>
+
+<style lang="postcss">
+  .segmented {
+    @apply inline-flex max-w-full gap-0.5 overflow-x-auto rounded-full bg-surface-3 p-1;
+    scrollbar-width: none;
+  }
+
+  .segmented::-webkit-scrollbar {
+    display: none;
+  }
+
+  .seg label {
+    @apply inline-flex cursor-pointer select-none whitespace-nowrap rounded-full px-3.5 py-1.5;
+    @apply text-sm font-medium text-ink-muted transition-colors duration-200 ease-out;
+  }
+
+  .seg label:hover {
+    @apply text-ink;
+  }
+
+  .seg input:checked + label {
+    @apply bg-surface text-ink shadow-card;
+  }
+
+  .seg input:focus-visible + label {
+    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-surface-3;
+  }
+
+  .mark {
+    @apply rounded-sm border border-line px-1.5 py-0.5;
+    @apply font-mono text-[0.66rem] uppercase tracking-[0.06em] text-ink-subtle;
+  }
+</style>

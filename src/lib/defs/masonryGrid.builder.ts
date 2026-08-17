@@ -6,6 +6,15 @@ export const MasonryGridDef: RegisteredComponent = {
   name: "MasonryGrid",
   inputs: [
     {
+      name: "imageRatio",
+      friendlyName: "Bildformat",
+      helperText:
+        "Einheitlicher Zuschnitt für alle Vorschaubilder. Die Originale sind 3:2, dieses Format schneidet also nichts ab — 4:3 beschneidet die Seiten leicht, 16:9 oben und unten, 1:1 am stärksten seitlich. Leer lassen, um das Format je Eintrag zu verwenden.",
+      type: "string",
+      enum: ["16:9", "3:2", "4:3", "1:1"],
+      defaultValue: "3:2",
+    },
+    {
       name: "items",
       type: "list",
       subFields: [

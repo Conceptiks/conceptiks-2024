@@ -20,42 +20,41 @@
 </script>
 
 {#if reviews.length}
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
-    {#each reviews as { logo, quote, reviewer }, i}
-      <div class="flex flex-col shadow-lg bg-white p-10 rounded-lg">
+  <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+    {#each reviews as { logo, quote, reviewer }}
+      <figure
+        class="flex flex-col rounded-2xl border border-line bg-surface p-8 shadow-card transition-shadow duration-300 ease-out hover:shadow-card-hover sm:p-10"
+      >
         <Image
           layout="fixed"
           objectFit="contain"
           width="{128}"
           height="{48}"
-          class="self-start object-left"
+          class="self-start object-left dark:brightness-0 dark:invert"
           src="{logo.src}"
           alt="{logo.alt}"
         />
-        <figure class="mt-10 flex flex-auto flex-col justify-between">
-          <blockquote class="text-lg leading-8 text-neutral-900">
-            <p>
-              {quote}
-            </p>
-          </blockquote>
-          <figcaption class="mt-10 flex items-center gap-x-6">
-            <Image
-              layout="fixed"
-              objectFit="cover"
-              width="{56}"
-              height="{56}"
-              class="h-14 w-14 rounded-full bg-neutral-50"
-              src="{reviewer.photo.src}"
-              alt="{reviewer.photo.alt}"
-            />
-
-            <div class="text-base">
-              <div class="font-semibold text-neutral-900">{reviewer.name}</div>
-              <div class="mt-1 text-neutral-500">{reviewer.title}</div>
-            </div>
-          </figcaption>
-        </figure>
-      </div>
+        <blockquote class="mt-8 flex-auto text-lg leading-relaxed text-ink">
+          <p class="!text-ink">
+            {quote}
+          </p>
+        </blockquote>
+        <figcaption class="mt-8 flex items-center gap-x-4 border-t border-line pt-6">
+          <Image
+            layout="fixed"
+            objectFit="cover"
+            width="{56}"
+            height="{56}"
+            class="h-14 w-14 rounded-full bg-surface-3"
+            src="{reviewer.photo.src}"
+            alt="{reviewer.photo.alt}"
+          />
+          <div class="text-base">
+            <div class="font-semibold text-ink">{reviewer.name}</div>
+            <div class="mt-0.5 text-ink-subtle">{reviewer.title}</div>
+          </div>
+        </figcaption>
+      </figure>
     {/each}
   </div>
 {/if}

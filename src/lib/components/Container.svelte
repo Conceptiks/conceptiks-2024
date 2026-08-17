@@ -6,9 +6,14 @@
   let className = "";
 </script>
 
+<!--
+  `relative` matters: headers are positioned, so a statically-positioned
+  container that overlaps one (e.g. the offer cards pulled up over the
+  /leistungen header) would be painted underneath it.
+-->
 <div
   class="{twMerge(
-    'px-8 mx-auto w-full',
+    'relative px-8 mx-auto w-full',
     slim ? 'max-w-screen-lg' : 'max-w-screen-xl',
     className
   )}"

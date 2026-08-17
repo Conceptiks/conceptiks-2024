@@ -12,24 +12,24 @@
     text: string;
     href: string;
   };
-  export let backgroundColor: string = "#0000ff";
+  export let backgroundColor: string = "#0E0004";
 </script>
 
 <div
-  class="text-white p-8 w-full grow flex flex-col justify-end rounded-lg drop-shadow-lg border-white/10 border"
+  class="flex h-full w-full grow flex-col justify-end rounded-2xl border border-white/10 p-8 text-white shadow-card transition-shadow duration-300 ease-out hover:shadow-card-hover sm:p-10"
   style="background-color:{backgroundColor}"
 >
-  <div class="w-10 h-10 mb-5">
-    {#if img}
+  {#if img}
+    <div class="mb-6 h-10 w-10">
       <Image layout="fullWidth" {...img} />
-    {/if}
-  </div>
-  <h3 class="mb-3">{title}</h3>
-  <p class="!text-white">
+    </div>
+  {/if}
+  <h3 class="mb-3 text-white">{title}</h3>
+  <p class="!text-white/75">
     {description}
   </p>
   {#if button}
-    <div class="mt-4">
+    <div class="mt-8">
       <Button href="{button.href}">{button.text}</Button>
     </div>
   {/if}

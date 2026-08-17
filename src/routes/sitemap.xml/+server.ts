@@ -2,7 +2,7 @@ import { fetchEntries } from "@builder.io/sdk-svelte";
 import { PUBLIC_BUILDER_API_KEY } from "$env/static/public";
 import type { RequestHandler } from "@sveltejs/kit";
 
-const baseUrl = "https://conceptiks.com";
+const baseUrl = "https://maximtan.de";
 
 const getAllCmsEntries = async (
   model: "page" | "portfolio-item",
@@ -20,13 +20,12 @@ const getAllCmsEntries = async (
     fetch,
   });
 
-  console.log(res);
-
   if (!res || !res.length) return [];
 
-  return res.map((page) => {
-    return page.data.url.slice(1);
-  });
+  return res
+    .map((page) => page.data?.url as string | undefined)
+    .filter((url): url is string => Boolean(url))
+    .map((url) => url.slice(1));
 };
 
 export const GET = (async ({ fetch }) => {

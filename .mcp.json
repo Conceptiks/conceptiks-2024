@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "builder-cms": {
+      "url": "https://mcp.builder.io/mcp/publish",
+      "transport": "http",
+      "type": "http"
+    }
+  }
+}

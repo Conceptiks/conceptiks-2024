@@ -4,31 +4,32 @@
   import Section from "$lib/components/Section.svelte";
 </script>
 
+<svelte:head>
+  <title>Kontakt | Maxim Tan</title>
+  <meta
+    name="description"
+    content="Nimm Kontakt mit Maxim Tan auf – per Projektanfrage-Tool oder direkt per E-Mail."
+  />
+</svelte:head>
+
 <HomeHeader
-  title="<h1><span class='highlight'>Kontaktiere</span> uns."
+  title="<span class='highlight'>Kontaktiere</span> mich."
   highlight="{null}"
-  description="Wenn du nach einer Lösung für Herausforderungen in deinem Unternehmen suchst, nutze unser Projektanfrage-Tool. Wenn du andere Fragen oder Anregungen hast, dann kontaktiere uns über unser Kontaktformular."
+  description="Wenn du nach einer Lösung für Herausforderungen in deinem Unternehmen suchst, nutze das Projektanfrage-Tool. Bei allen anderen Fragen und Anregungen schreib mir einfach direkt."
 ></HomeHeader>
 
-<div class="my-40">
-  <Section id="kontakt">
-    <Container class="text-center">
-      <a
-        href="mailto:kontakt@conceptiks.com"
-        class="text-7xl font-medium bg-gradient-to-br from-purple-500 to-primary bg-clip-text text-transparent"
-        >kontakt@conceptiks.com</a
-      >
-      <p class="mt-4 text-lg">
-        Wenn du Fragen hast oder uns einfach nur kennenlernen möchtest, schreib
-        uns eine Mail. Wir freuen uns auf deine Nachricht.
-      </p>
-    </Container>
-  </Section>
-</div>
-
-<style lang="postcss">
-  input,
-  textarea {
-    @apply rounded-md text-base border border-neutral-300 px-4 py-3 w-full;
-  }
-</style>
+<Section id="kontakt">
+  <Container class="text-center">
+    <h2 class="sr-only">E-Mail</h2>
+    <a
+      href="mailto:hallo@maximtan.de"
+      class="highlight inline-block break-words text-3xl font-semibold tracking-tightest sm:text-5xl lg:text-6xl"
+    >
+      hallo@maximtan.de
+    </a>
+    <p class="mx-auto mt-6 max-w-xl text-lg">
+      Wenn du Fragen hast oder mich einfach nur kennenlernen möchtest, schreib
+      mir eine Mail. Ich freue mich auf deine Nachricht.
+    </p>
+  </Container>
+</Section>
