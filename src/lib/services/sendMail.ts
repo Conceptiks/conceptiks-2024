@@ -1,5 +1,5 @@
-import sgMail from "@sendgrid/mail";
 import { PRIVATE_SENDGRID_API_KEY } from "$env/static/private";
+import sgMail from "@sendgrid/mail";
 
 interface Options {
   from?: {
@@ -25,8 +25,8 @@ export const sendMail = async ({
 
   const [response] = await sgMail.send({
     from: {
-      email: from?.email || "hallo@maximtan.de",
-      name: from?.name || "maximtan.de",
+      email: from?.email || "noreply@conceptiks.com",
+      name: from?.name || "Conceptiks",
     },
     to,
     replyTo,
