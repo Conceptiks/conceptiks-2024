@@ -25,8 +25,8 @@ export const sendMail = async ({
 
   const [response] = await sgMail.send({
     from: {
-      email: from?.email || "noreply@conceptiks.com",
-      name: from?.name || "Conceptiks",
+      email: from?.email || "noreply@maximtan.de",
+      name: from?.name || "maximtan website",
     },
     to,
     replyTo,
